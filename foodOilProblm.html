@@ -1,1015 +1,5522 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
-    <title>2026年台灣毒油查詢-中聯油脂問題油品查詢工具</title>
-    <!-- Bootstrap 5.3.0 + Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <!-- jQuery 3.7.1 -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js">
-    </script>
-    <style>
-        body {
-            background: #f8f9fa;
-        }
-        .navbar-brand {
-            letter-spacing: 1px;
-        }
-        .tab-pane {
-            animation: fadeIn 0.25s ease-in;
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(5px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .source-badge {
-            transition: all 0.2s;
-            user-select: none;
-            cursor: pointer;
-        }
-        .source-badge.active {
-            transform: scale(1.05);
-            box-shadow: 0 0 0 2px #fff, 0 0 0 4px #0d6efd;
-        }
-        .source-badge.bg-primary.active {
-            box-shadow: 0 0 0 2px #fff, 0 0 0 4px #0d6efd;
-        }
-        .source-badge.bg-success.active {
-            box-shadow: 0 0 0 2px #fff, 0 0 0 4px #198754;
-        }
-        .source-badge.bg-warning.active {
-            box-shadow: 0 0 0 2px #fff, 0 0 0 4px #ffc107;
-        }
-        .source-badge.bg-secondary.active {
-            box-shadow: 0 0 0 2px #fff, 0 0 0 4px #6c757d;
-        }
-        .source-badge.bg-info.active {
-            box-shadow: 0 0 0 2px #fff, 0 0 0 4px #0dcaf0;
-        }
-        #resultTable th {
-            cursor: pointer;
-            position: relative;
-        }
-        #resultTable th i {
-            font-size: 0.8rem;
-            margin-left: 4px;
-        }
-        .table-responsive {
-            max-height: 65vh;
-            overflow-y: auto;
-        }
-        .sticky-lg-top {
-            top: 80px;
-            z-index: 10;
-        }
-        .card-header.bg-white .badge {
-            font-size: 0.85rem;
-        }
-        .pagination .page-link {
-            padding: 0.25rem 0.65rem;
-            font-size: 0.9rem;
-        }
-        footer {
-            font-size: 0.8rem;
-        }
-        @media (max-width: 992px) {
-            .sticky-lg-top {
-                position: relative !important;
-                top: 0 !important;
-            }
-        }
-        .no-result {
-            text-align: center;
-            color: #6c757d;
-            padding: 2rem 0;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026年台灣毒油查詢-中聯油脂問題油品苯駢芘超標事件</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+<!-- <link href="css/style.css" rel="stylesheet"> -->
+<style>
+   :root{
+  --ink:#1f2421;
+  --paper:#f6f4ee;
+  --alert:#b3401f;
+  --alert-soft:#f4e1d8;
+  --safe:#3c6e52;
+  --line:#dcd6c8;
+  --gold:#c98a2c;
+}
+ 
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+}
+
+/* Header */
+.site-header{
+  background:var(--ink);
+  color:#f6f4ee;
+  padding:28px 0;
+  border-bottom:4px solid var(--alert);
+}
+.badge-alert{
+  display:inline-block;
+  background:var(--alert);
+  color:#fff;
+  font-size:.75rem;
+  letter-spacing:.08em;
+  padding:3px 10px;
+  border-radius:2px;
+  margin-bottom:8px;
+}
+.site-title{
+  font-size:1.9rem;
+  font-weight:800;
+  margin:0 0 4px 0;
+}
+.site-sub{
+  margin:0;
+  color:#c9c3b3;
+  font-size:.95rem;
+}
+.header-stat{
+  text-align:right;
+  border-left:1px solid #444;
+  padding-left:20px;
+}
+.stat-num{
+  font-size:2.4rem;
+  font-weight:800;
+  color:#e7a15a;
+  line-height:1;
+}
+.stat-label{
+  font-size:.75rem;
+  color:#c9c3b3;
+  line-height:1.3;
+  margin-top:2px;
+}
+
+/* Cards */
+.card{
+  border:1px solid var(--line);
+  border-radius:6px;
+  box-shadow:none;
+  background:#fffdf9;
+}
+.section-title{
+  font-size:1.15rem;
+  font-weight:700;
+  margin-bottom:10px;
+  border-left:4px solid var(--gold);
+  padding-left:10px;
+}
+.disclaimer-box{
+  border-left:4px solid var(--alert);
+  background:var(--alert-soft);
+  color:#5a2b18;
+  font-size:.9rem;
+}
+
+/* Search */
+.search-card{
+  border-top:4px solid var(--alert);
+}
+#searchInput:focus, #filterSource:focus{
+  border-color:var(--gold);
+  box-shadow:0 0 0 .2rem rgba(201,138,44,.25);
+}
+
+/* Table */
+#resultTable thead{
+  background:var(--ink);
+  color:#fff;
+}
+#resultTable thead th{
+  font-weight:600;
+  font-size:.85rem;
+  white-space:nowrap;
+}
+#resultTable tbody tr:hover{
+  background:#fbeee0;
+}
+.badge-src{
+  font-size:.7rem;
+  padding:3px 7px;
+  border-radius:3px;
+  font-weight:600;
+  white-space:nowrap;
+}
+.badge-src.recalled{ background:#f2c94c33; color:#8a6d1e; border:1px solid #d8b756;}
+.badge-src.fumao{ background:#e8f0ea; color:var(--safe); border:1px solid #b6d3c1;}
+.badge-src.fushou{ background:#fde8e2; color:var(--alert); border:1px solid #edb8a6;}
+.hit-mark{
+  background:#fff2a8;
+  padding:0 2px;
+  border-radius:2px;
+}
+
+.badge-src.taishan{ background:#eaf1fb; color:#2a5a9c; border:1px solid #b9cfe8;}
+
+
+/* Fact list */
+.fact-list{
+  list-style:none;
+  padding:0;
+  margin:0;
+  font-size:.92rem;
+}
+.fact-list li{
+  padding:8px 0;
+  border-bottom:1px dashed var(--line);
+  display:flex;
+  gap:8px;
+}
+.fact-list li:last-child{ border-bottom:none; }
+.fact-list li::before{
+  content:"›";
+  color:var(--alert);
+  font-weight:800;
+}
+
+/* News */
+.news-list{ font-size:.9rem; max-height:340px; overflow-y:auto; }
+.news-item{
+  padding:10px 0;
+  border-bottom:1px solid var(--line);
+}
+.news-item:last-child{ border-bottom:none; }
+.news-date{
+  display:inline-block;
+  font-size:.75rem;
+  color:#fff;
+  background:var(--safe);
+  padding:1px 8px;
+  border-radius:10px;
+  margin-bottom:4px;
+}
+
+/* Contact */
+.contact-box{
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:14px 6px;
+  background:#fffdf9;
+}
+.contact-brand{ font-weight:700; font-size:.9rem; }
+.contact-phone{ color:var(--alert); font-weight:800; font-size:1.1rem; }
+.contact-note{ font-size:.75rem; color:#888; }
+
+.site-footer{
+  padding:20px 0;
+  color:#888;
+  border-top:1px solid var(--line);
+  margin-top:30px;
+}
+
+/* DataTables 微調 */
+.dataTables_wrapper .dataTables_length select{
+  border:1px solid var(--line);
+  border-radius:4px;
+/*  padding:2px 6px;*/
+}
+.dataTables_wrapper .dataTables_info{
+  font-size:.85rem;
+  color:#666;
+}
+.dataTables_wrapper .dataTables_paginate .page-link{
+  color:var(--ink);
+}
+.dataTables_wrapper .dataTables_paginate .page-item.active .page-link{
+  background: #ffffff;
+  border-color: #a9a9a9;
+}
+.dataTables_wrapper .dataTables_paginate .page-link:hover{
+  background:var(--alert-soft);
+}
+table.dataTable{
+  border-collapse:collapse !important;
+}
+
+.text-muted2 {
+  color:white;
+}
+
+@media (max-width: 576px){
+  .header-stat{ text-align:left; border-left:none; padding-left:0; margin-top:10px; }
+  .site-title{ font-size:1.4rem; }
+}
+ 
+
+
+</style>
+
 </head>
 <body>
 
-    <!-- ===== 頂部導航 ===== -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-danger shadow-sm sticky-top">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="#">
-                <i class="bi bi-exclamation-triangle-fill me-2"></i>2026年台灣毒油查詢
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navMenu">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link active" href="#" data-tab="news"><i class="bi bi-newspaper me-1"></i>最新消息</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#" data-tab="search"><i class="bi bi-search me-1"></i>查詢</a></li>
-                </ul>
-                <span class="navbar-text text-white-50 small" id="updateTime"></span>
-            </div>
+<header class="site-header">
+  <div class="container">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <div>
+        <span class="badge-alert">食安警訊</span>
+        <h1 class="site-title">2026年台灣毒油查詢-問題油品查詢平台</h1>
+        <p class="site-sub">中聯油脂（泰山／福壽／福懋）大豆沙拉油苯駢芘（Benzo[a]pyrene）超標事件,正常值小於2</p>
+      </div>
+      <div class="header-stat">
+        <div class="stat-num" id="statBapValue">8.1</div>
+        <div class="stat-label">μg/kg 檢出值<br><span class="text-muted2">(法規上限 2.0 μg/kg)</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="container py-4">
+
+  <div class="alert alert-warning disclaimer-box" role="alert">
+    <strong>使用說明與免責聲明：</strong>
+    本頁資料整理自公開流出之地方政府/業者/衛生單位公告截圖、資料等，非官方系統僅供消費者初步比對參考。<br>
+    整理過程可能有誤差，正式資訊請以
+    <a href="https://www.fda.gov.tw" target="_blank" rel="noopener">衛福部食藥署</a>、
+    <a href="https://www.fds.taichung.gov.tw/1630364/3313371/" target="_blank" rel="noopener">台中市政府</a>
+    及所在地衛生局最新公告為準。若資訊有誤，歡迎協助回報更正。<a href="mailto:one29382165@gmail.com">回報問題</a>
+  </div>
+
+  <!-- 搜尋區 -->
+  <section class="card search-card mb-4">
+    <div class="card-body">
+      <h2 class="section-title">🔍 商品查詢-輸入關鍵字</h2>
+      <p class="text-muted small mb-3">可輸入品牌、店家名稱、地址關鍵字、或包裝上的批號（例如 C2150426O 或 20270410000407），下方全部資料共 <strong id="totalCount">-</strong> 筆資料，可分頁瀏覽</p>
+      <div class="row g-2">
+        <div class="col-12 col-md-8">
+          <input type="text" id="searchInput" class="form-control form-control-lg" placeholder="輸入公司名稱、店名、地址或批號…">
         </div>
-    </nav>
+        <div class="col-12 col-md-4">
+          <select id="filterSource" class="form-select form-select-lg">
+            <option value="all">全部來源</option>
+            <option value="recalled_products">三廠自有品牌回收產品(泰山、福懋、福壽）</option>
+            <option value="fumao">福懋油脂下游業者</option>
+            <option value="fushou">福壽實業下游業者</option>
+            <option value="taishan">泰山企業下游業者（臺中市）</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <!-- ===== 主內容 ===== -->
-    <main class="container-fluid py-3">
+  <!-- 結果表格 -->
+  <section class="card mb-4">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table id="resultTable" class="table table-hover align-middle nowrap" style="width:100%">
+          <thead>
+            <tr>
+              <th>來源</th>
+              <th>公司／店家</th>
+              <th>地址</th>
+              <th>品名</th>
+              <th>批號</th>
+              <th>數量(KG)</th>
+              <th>來源篩選鍵</th>
+            </tr>
+          </thead>
+          <tbody id="resultBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
 
-        <!-- 最新消息 -->
-        <section id="tabNews" class="tab-pane active">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card shadow-sm border-0">
-                        <div class="card-header bg-danger text-white fw-bold">
-                            <i class="bi bi-megaphone-fill me-2"></i>最新公告
-                        </div>
-                        <div class="card-body" id="newsContainer">
-                            <div class="text-center py-5">
-                                <div class="spinner-border text-danger" role="status"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <div class="row g-4">
+    <!-- 事件重點整理 -->
+    <div class="col-12 col-lg-6">
+      <section class="card h-100">
+        <div class="card-body">
+          <h2 class="section-title">📌 事件重點</h2>
+          <ul class="fact-list" id="factList"></ul>
+        </div>
+      </section>
+    </div>
 
-        <!-- 查詢 -->
-        <section id="tabSearch" class="tab-pane" style="display:none;">
-            <div class="row g-3">
-                <div class="col-12 col-lg-4">
-                    <div class="card shadow-sm border-0 sticky-lg-top">
-                        <div class="card-header bg-dark text-white fw-bold">
-                            <i class="bi bi-funnel me-2"></i>搜尋條件
-                        </div>
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold">搜尋類型</label>
-                                <select class="form-select" id="searchType">
-                                    <option value="keyword">🔍 關鍵字 (全部)</option>
-                                    <option value="company">🏢 公司名稱</option>
-                                    <option value="product">📦 商品名稱</option>
-                                    <option value="batch">🔢 批號</option>
-                                    <option value="address">📍 地址</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold">關鍵字</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="searchKeyword" placeholder="請輸入關鍵字">
-                                    <button class="btn btn-danger" id="searchBtn"><i class="bi bi-search"></i> 搜尋</button>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold">資料來源</label>
-                                <div class="d-flex flex-wrap gap-2">
-                                    <span class="badge bg-secondary source-badge active" data-source="all" style="cursor:pointer;">全部</span>
-                                    <span class="badge bg-primary source-badge" data-source="fumao_bulk" style="cursor:pointer;">福懋散裝</span>
-                                    <span class="badge bg-success source-badge" data-source="fumao_barrel" style="cursor:pointer;">福懋桶裝</span>
-                                    <span class="badge bg-warning text-dark source-badge" data-source="fushou" style="cursor:pointer;">福壽</span>
-                                    <span class="badge bg-info text-dark source-badge" data-source="own_brand" style="cursor:pointer;">自有品牌</span>
-                                </div>
-                            </div>
-                            <div class="d-grid">
-                                <button class="btn btn-outline-secondary" id="resetBtn"><i class="bi bi-arrow-counterclockwise me-1"></i>重設</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-lg-8">
-                    <div class="card shadow-sm border-0">
-                        <div class="card-header bg-white d-flex justify-content-between align-items-center flex-wrap">
-                            <span class="fw-bold"><i class="bi bi-list-ul me-2"></i>查詢結果</span>
-                            <span class="badge bg-secondary" id="resultCount">0 筆</span>
-                        </div>
-                        <div class="card-body p-0">
-                            <div class="table-responsive" id="resultTableWrap">
-                                <table class="table table-hover table-striped mb-0" id="resultTable">
-                                    <thead class="table-dark">
-                                        <tr>
-                                            <th data-sort="company">公司 <i class="bi bi-arrow-up-short"></i></th>
-                                            <th data-sort="address">地址</th>
-                                            <th data-sort="product">商品</th>
-                                            <th data-sort="batch">批號</th>
-                                            <th data-sort="spec">規格</th>
-                                            <th data-sort="source">來源</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="resultBody">
-                                        <tr>
-                                            <td colspan="6" class="no-result">請輸入關鍵字開始查詢</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center p-2 border-top flex-wrap">
-                                <span class="small text-muted" id="pageInfo">第 1 / 1 頁</span>
-                                <nav>
-                                    <ul class="pagination pagination-sm mb-0" id="pagination">
-                                        <li class="page-item"><a class="page-link" href="#" data-page="prev">‹</a></li>
-                                        <li class="page-item"><a class="page-link" href="#" data-page="next">›</a></li>
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <!-- 最新消息 -->
+    <div class="col-12 col-lg-6">
+      <section class="card h-100">
+        <div class="card-body">
+          <h2 class="section-title">🗞️ 最新消息公布區</h2>
+          <div id="newsList" class="news-list"></div>
+        </div>
+      </section>
+    </div>
+  </div>
 
-        <footer class="mt-4 pt-3 border-top text-muted small">
-            <p class="mb-1"><strong>⚠️ 資料來源：</strong>台中市食安處 / 衛福部食藥署 公告 (115.07.02)。本工具為社群自製整理，<strong>非官方系統</strong>，正確性請以官方最新公告為準。</p>
-            <p class="mb-0">苯駢芘 (BaP) 限量 2.0 μg/kg，中聯油脂原料批號 315-1150404 實測 8.1 μg/kg，超標約 4.05 倍。總計收錄 <strong id="totalRecordsCount">0</strong> 筆下游紀錄。</p>
-        </footer>
-    </main>
+  <!-- 退貨資訊 -->
+  <section class="card mt-4">
+    <div class="card-body">
+      <h2 class="section-title">↩️ 退貨/客服窗口</h2>
+      <div class="row text-center g-3">
+        <div class="col-6 col-md-3">
+          <div class="contact-box">
+            <div class="contact-brand"><a href="https://www.taisun.com.tw/" target="_blank">泰山企業</a></div>
+            <div class="contact-phone">0800-079-080</div>
+            <div class="contact-note">受理至 2026/9/30</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="contact-box">
+            <div class="contact-brand"><a href="https://www.fopco.com.tw/" target="_blank">福懋油脂</a></div>
+            <div class="contact-phone">0800-888-255</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="contact-box">
+            <div class="contact-brand"><a href="https://www.fwusow.com.tw/" target="_blank">福壽實業</a></div>
+            <div class="contact-phone">0800-236-699</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="contact-box">
+            <div class="contact-brand"><a href="https://www.fda.gov.tw/TC/index.aspx" target="_blank">衛福部食藥署 1919</a></div>
+            <div class="contact-phone">1919</div>
+            <div class="contact-note">食安通報專線</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <!-- ===== Bootstrap JS ===== -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js">
-    </script>
+  <p class="text-center text-muted small mt-4" id="lastUpdated"></p>
 
-    <script>
-        // ================================================================
-        //  1. 完整資料 (358 筆)
-        // ================================================================
-        var DATA = {
-            meta: {
-                title: "中聯油脂苯駢芘超標事件 消費者查詢工具",
-                source_note: "資料來源：使用者提供之台中市食安處/相關業者公告截圖，製表日期 115.07.02。",
-                batch_root: "315-1150404",
-                bap_value: "8.1 μg/kg (限量 2.0 μg/kg)",
-                last_updated: "2026-07-04"
-            },
-            // --- 表一：自有品牌問題產品 (22筆) ---
-            recalled_products: [
-                { brand: "福壽實業", product: "福壽大豆沙拉油 3L", batch: "C1160426K", expiry: "2027.04.15", spec: "3L" },
-                { brand: "福壽實業", product: "福壽大豆沙拉油 18L", batch: "C2150426O", expiry: "2027.04.14", spec: "18L" },
-                { brand: "福壽實業", product: "福壽大豆沙拉油 18L", batch: "C2150426P", expiry: "2027.04.14", spec: "18L" },
-                { brand: "福壽實業", product: "福壽大豆沙拉油 18L", batch: "C2160426O", expiry: "2027.04.15", spec: "18L" },
-                { brand: "福壽實業", product: "福壽大豆沙拉油 18L", batch: "C2160426P", expiry: "2027.04.15", spec: "18L" },
-                { brand: "福壽實業", product: "福壽健味香油 3L", batch: "BL150426L", expiry: "2028.04.05", spec: "3L" },
-                { brand: "福壽實業", product: "青果多酚精華調合油 2L(僅外銷)", batch: "BL140426A", expiry: "", spec: "2L" },
-                { brand: "福懋油脂", product: "益康大豆沙拉油 18L", batch: "20270410000407", expiry: "2027.04.10",
-                spec: "18L" },
-                { brand: "福懋油脂", product: "益康大豆沙拉油 18L", batch: "20270411000408", expiry: "2027.04.11",
-                spec: "18L" },
-                { brand: "福懋油脂", product: "益康大豆沙拉油 18KG", batch: "20270413000408", expiry: "2027.04.13",
-                    spec: "18KG" },
-                { brand: "福懋油脂", product: "益康烹調油 18L", batch: "20270413000403", expiry: "2027.04.13/14",
-                spec: "18L" },
-                { brand: "福懋油脂", product: "一級黃豆油", batch: "202604091315", expiry: "2026.10.04", spec: "-" },
-                { brand: "泰山企業", product: "金酥耐炸油 18L", batch: "2027040801", expiry: "", spec: "18L" },
-                { brand: "泰山企業", product: "沙拉油 18L", batch: "2027040901", expiry: "", spec: "18L" },
-                { brand: "泰山企業", product: "環保鐵桶沙拉油 18kg", batch: "2027040901", expiry: "", spec: "18kg" },
-                { brand: "泰山企業", product: "泰山不飽和大豆沙拉油 2.6L*6入(新版)", batch: "2027040901", expiry: "",
-                    spec: "2.6L*6" },
-                { brand: "泰山企業", product: "泰山精選蔬菜油 3L*6", batch: "2027072506", expiry: "", spec: "3L*6" },
-                { brand: "泰山企業", product: "泰山好理調合油 2L*6", batch: "2027072506", expiry: "", spec: "2L*6" },
-                { brand: "泰山企業", product: "泰山大豆沙拉油 0.6L*12入(新版)", batch: "2027041301", expiry: "",
-                    spec: "0.6L*12" },
-                { brand: "泰山企業", product: "泰山歐式果實精華調合油 1.5L*6入", batch: "2027101301", expiry: "",
-                    spec: "1.5L*6" },
-                { brand: "泰山企業", product: "泰山好理調合油 0.6L*24", batch: "2027072504", expiry: "", spec: "0.6L*24" },
-                { brand: "泰山企業", product: "泰山花生風味調和油 2L*6入", batch: "2027100901", expiry: "", spec: "2L*6" }
-            ],
-            // --- 表二：福懋散裝 (27筆) ---
-            fumao_bulk: [
-                ["聯華食品工業股份有限公司-基隆", "基隆市安樂區內寮里訓練街43號", "一級黃豆油", "202604101315", 6010],
-                ["東穎食品實業股份有限公司", "新北市中和區立德街82號", "一級黃豆油", "202604091315", 11100],
-                ["桂冠實業股份有限公司", "新北市中和區連和里中山路二段329號", "一級黃豆油", "202604091315", 22030],
-                ["廣達香食品股份有限公司", "新北市新莊區化成路382巷18號", "一級黃豆油", "202604091315", 5000],
-                ["大地農產有限公司", "桃園市桃園區藝文路7號", "一級黃豆油", "202604091315", 4050],
-                ["龍騰坊企業有限公司", "桃園市龍潭區工西路62號21號", "一級黃豆油", "202604091315", 6000],
-                ["聯華食品工業股份有限公司-中壢", "桃園市中壢區新豐里250號", "一級黃豆油", "202604091315", 5060],
-                ["聯合利華食品股份有限公司", "新竹市新莊里150號", "一級黃豆油", "202604091315", 16020],
-                ["金安信食品有限公司", "台中市南屯區公園路17號", "一級黃豆油", "202604091315", 3390],
-                ["森御盒膳股份有限公司", "台中市大甲區日南里七路10號", "一級黃豆油", "202604091315", 6990],
-                ["聯華食品工業股份有限公司-彰化", "彰化縣北斗鎮大新里四維路二段87號", "一級黃豆油", "202604081315", 5940],
-                ["木家泰食品股份有限公司", "彰化縣芬園鄉嘉興村大同路625號", "一級黃豆油", "202604101315", 6200],
-                ["漢寶增豐牧場", "彰化縣芳苑鄉漢寶村大同路625號", "一級黃豆油", "202604101315", 9000],
-                ["華有食工業(股)有限公司", "南投縣南崗工業區自由九街9號", "一級黃豆油", "202604081315", 25020],
-                ["多古師食品有限公司", "雲林縣大義村田美路23號", "一級黃豆油", "202604091315", 33850],
-                ["忝德貿易有限公司", "雲林縣斗南鎮北銘天安街17號1樓", "一級黃豆油", "202604091315", 6010],
-                ["林文政", "雲林縣台西鄉五村里100號", "一級黃豆油", "202604091315", 7010],
-                ["張玉發", "雲林縣西螺鎮茄塘三之3號", "一級黃豆油", "202604091315", 5160],
-                ["林鴻理", "雲林縣西螺鎮埤頭里52號", "一級黃豆油", "202604091315", 7010],
-                ["峰妙商行", "雲林縣西螺鎮埤頭里埤頭75之3號", "一級黃豆油", "202604101315", 4900],
-                ["誠泰食品有限公司", "雲林縣莿桐鄉六合村嘉興街39號1樓", "一級黃豆油", "202604091315", 6010],
-                ["玉品實業有限公司", "(地址未清晰)", "一級黃豆油", "202604101315", 52110],
-                ["南巨塑膠工業股份有限公司", "雲林縣林內鄉中興路台塑工業區121號之1", "一級黃豆油", "202604091315", 33850],
-                ["厚振強", "雲林縣莿桐鄉甘厝村75號", "一級黃豆油", "202604091315", 5990],
-                ["新農科技股份有限公司", "台南市官田區富強路27號", "一級黃豆油", "202604101315", 24710],
-                ["維勤事業有限公司", "高雄市大寮區旗楠路103巷23號", "一級黃豆油", "202604091315", 15030],
-                ["庚頂義豐廟油廠", "屏東縣庚頂鄉庚頂中正路1-2號", "一級黃豆油", "202604091315", 25010]
-            ],
-            // --- 表三：福懋桶裝 (224筆) ---
-            fumao_barrel: [
-                [1, "信興油行", "基隆市仁愛區光華里蜂三街11號一樓", "益康烹調油(調合油)", "18L", "20270413000403", 116],
-                [2, "稜春形", "基隆市仁愛區蜂二街13-1號", "益康大豆沙拉油", "18L", "20270410000407", 1601],
-                [3, "稜春形", "基隆市仁愛區蜂二街13-1號", "益康大豆沙拉油", "18L", "20270410000407", 17],
-                [4, "三和行", "基隆市仁愛區精一路24號", "益康大豆沙拉油", "18L", "20270410000407", 825],
-                [5, "廉連盛通生活事業有限公司", "台北市中山區興群三路218號2樓", "益康大豆沙拉油", "18L", "20270410000407", 132],
-                [6, "廉連盛通生活事業有限公司", "台北市中山區興群三路218號2樓", "益康大豆沙拉油", "18L", "20270410000407", 693],
-                [7, "廉連盛通生活事業有限公司", "台北市中山區興群三路218號2樓", "益康大豆沙拉油", "18L", "20270410000407", 330],
-                [8, "廉連盛通生活事業有限公司", "台北市中山區興群三路218號2樓", "益康大豆沙拉油", "18L", "20270410000407", 644],
-                [9, "廉連盛通生活事業有限公司", "台北市中山區興群三路218號2樓", "益康大豆沙拉油", "18L", "20270410000407", 429],
-                [10, "廉連盛通生活事業有限公司", "台北市中山區興群三路218號2樓", "益康大豆沙拉油", "18L", "20270410000407", 215],
-                [11, "晶華國際酒店股份有限公司", "台北市中山區中山北路2段39巷3號1至20樓", "益康大豆沙拉油", "18L", "20270410000407",
-                    990
-                ],
-                [12, "晶華國際酒店股份有限公司", "台北市中山區中山北路2段39巷3號1至20樓", "益康大豆沙拉油", "18KG",
-                "20270413000408", 108],
-                [13, "故宮晶華股份有限公司", "台北市士林區至善路二段221號", "益康大豆沙拉油(調合油)", "18L", "20270414000403",
-                    264
-                ],
-                [14, "晨崎食品貿易有限公司", "台北市文山區興隆路三段36巷15弄12號", "益康大豆沙拉油", "18L", "20270410000407",
-                825],
-                [15, "晨崎食品貿易有限公司", "台北市文山區興隆路三段36巷15弄12號", "益康大豆沙拉油(調合油)", "18L",
-                    "20270414000403", 17
-                ],
-                [16, "施律興業有限公司", "台北市中山區合江路180巷3號", "益康大豆沙拉油", "18L", "20270410000407", 462],
-                [17, "施律興業有限公司", "台北市中山區合江路180巷3號", "益康大豆沙拉油", "18KG", "20270411000408", 1188],
-                [18, "施律興業有限公司", "台北市中山區合江路180巷3號", "益康大豆沙拉油(調合油)", "18L", "20270414000403", 33],
-                [19, "曄村實業有限公司", "新北市正義河堤同安街99-9號", "益康大豆沙拉油", "18L", "20270410000407", 825],
-                [20, "曄村實業有限公司", "新北市正義河堤同安街99-9號", "益康大豆沙拉油(調合油)", "18L", "20270414000403", 99],
-                [21, "周明青", "新北市板橋區莫萊街15號", "益康大豆沙拉油", "18L", "20270410000407", 825],
-                [22, "宏麗食品有限公司", "新北市新店區安平路35巷10-2號1樓", "益康大豆沙拉油", "18L", "20270410000407", 1650],
-                [23, "宏麗食品有限公司", "新北市新店區安平路35巷10-2號1樓", "益康大豆沙拉油(調合油)", "18L", "20270414000403",
-                    99
-                ],
-                [24, "路易莎職人咖啡股份有限公司", "新北市新店區五工一路106號", "益康大豆沙拉油", "18L", "20270410000407", 165],
-                [25, "路易莎職人咖啡股份有限公司", "新北市新店區五工一路106號", "益康大豆沙拉油", "18KG", "20270411000408",
-                132],
-                [26, "路易莎職人咖啡股份有限公司", "新北市新店區五工一路106號", "益康大豆沙拉油(調合油)", "18L",
-                    "20270414000403", 413
-                ],
-                [27, "路易莎職人咖啡股份有限公司", "新北市新店區五工一路106號", "益康大豆沙拉油(調合油)", "18L",
-                    "20270414000403", 66
-                ],
-                [28, "路易莎職人咖啡股份有限公司", "新北市新店區五工一路106號", "益康大豆沙拉油", "18L", "20270414000403", 545],
-                [29, "老協珍股份有限公司", "新北市八里區中山路二段66號", "益康大豆沙拉油(調合油)", "18L", "20270414000403", 825],
-                [30, "信興油行", "基隆市仁愛區光華里蜂三街11號一樓", "益康大豆沙拉油", "18L", "20270410000407", 1650],
-                [31, "信興油行", "基隆市仁愛區光華里蜂三街11號一樓", "益康大豆沙拉油(調合油)", "18L", "20270414000403", 17],
-                [32, "三和行", "基隆市仁愛區精一路24號", "益康大豆沙拉油(調合油)", "18L", "20270414000403", 33],
-                [33, "廉連盛通生活事業有限公司", "台北市中山區興群三路218號2樓", "益康大豆沙拉油(調合油)", "18L",
-                    "20270414000403", 66
-                ],
-                [34, "泰福食品行", "新北市三峽區三樹街350號", "益康大豆沙拉油", "18KG", "20270413000408", 900],
-                [35, "曇思思整合行銷有限公司", "新北市三峽區介壽路2段138巷1弄98-11號", "益康大豆沙拉油", "18L",
-                "20270410000407", 1650],
-                [36, "宏鑫食品有限公司", "新北市上城區自強路31之1號", "益康大豆沙拉油", "18L", "20270411000408", 4950],
-                [37, "宏鑫食品有限公司", "新北市上城區自強路31之1號", "益康大豆沙拉油", "18L", "20270411000408", 99],
-                [38, "皇金興業商行", "新北市中和區福祥路122號", "益康大豆沙拉油", "18L", "20270410000407", 8250],
-                [39, "尚義興業商店", "新北市中和區福祥路122號", "益康大豆沙拉油(調合油)", "18L", "20270414000403", 825],
-                [40, "尚義興業商店", "新北市中和區福祥路122號", "益康大豆沙拉油(調合油)", "18L", "20270414000403", 33],
-                [41, "明遠雄糧行", "新北市中和區興南路一段125號", "益康大豆沙拉油", "18L", "20270410000407", 495],
-                [42, "明遠雄糧行", "新北市中和區興南路一段125號", "益康大豆沙拉油", "18L", "20270410000407", 825],
-                [43, "明遠雄糧行", "新北市中和區興南路一段125號", "益康大豆沙拉油(調合油)", "18L", "20270414000403", 66],
-                [44, "曇柏有限公司", "新北市五股區中興路1段17號", "益康大豆沙拉油", "18L", "20270410000407", 842],
-                [45, "曇柏有限公司", "新北市五股區中興路1段17號", "益康大豆沙拉油", "18L", "20270410000407", 33],
-                [46, "曇柏有限公司", "新北市五股區中興路1段17號", "益康大豆沙拉油(調合油)", "18L", "20270414000403", 1139],
-                [47, "西曇商行有限公司", "新北市五股區中興路二段11之25號", "益康大豆沙拉油", "18L", "20270410000407", 990],
-                [48, "西曇商行有限公司", "新北市五股區中興路二段11之25號", "益康大豆沙拉油", "18L", "20270411000408", 3300],
-                [49, "西曇商行有限公司", "新北市五股區中興路二段11之25號", "益康大豆沙拉油(調合油)", "18L", "20270414000403",
-                    66
-                ],
-                [50, "布刈綿包股份有限公司", "新北市五股區五工六路53之2號2樓", "益康大豆沙拉油", "18KG", "20270413000408", 900],
-                [51, "健灝生技有限公司", "新北市五股區森八路39號2", "益康大豆沙拉油", "18L", "20270410000407", 413],
-                [52, "人王商興店", "新北市五股區成泰路95-5號", "益康大豆沙拉油", "18L", "20270411000408", 660],
-                [53, "台灣愷良農產運銷有限公司", "新北市汐止區中興路236號2樓", "益康大豆沙拉油", "18L", "20270410000407", 8250],
-                [54, "台灣愷良農產運銷有限公司", "新北市汐止區中興路236號2樓", "益康大豆沙拉油", "18L", "20270411000408", 116],
-                [55, "台灣愷良農產運銷有限公司", "新北市汐止區中興路236號2樓", "益康大豆沙拉油", "18L", "20270411000408", 2145],
-                [56, "台灣愷良農產運銷有限公司", "新北市汐止區中興路236號2樓", "益康大豆沙拉油", "18L", "20270411000408", 83],
-                [57, "台灣愷良農產運銷有限公司", "新北市汐止區中興路236號2樓", "益康大豆沙拉油", "18L", "20270411000408", 3630],
-                [58, "台灣愷良農產運銷有限公司", "新北市汐止區中興路236號2樓", "益康大豆沙拉油", "18L", "20270411000408", 50],
-                [59, "台灣愷良農產運銷有限公司", "新北市汐止區中興路236號2樓", "益康大豆沙拉油", "18L", "20270411000408", 2888],
-                [60, "台灣愷良農產運銷有限公司", "新北市汐止區中興路236號2樓", "益康大豆沙拉油", "18L", "20270411000408", 891],
-                [61, "許嘯祐", "新北市汐止區福德一路213巷6號", "益康大豆沙拉油(調合油)", "18L", "20270414000403", 165],
-                [62, "名陽食品有限公司", "新北市板橋區大觀路一段38巷156弄183號", "益康大豆沙拉油", "18L", "20270410000407",
-                1650],
-                [63, "稜形食品有限公司", "新北市板橋區大觀路一段38巷156弄183號", "益康大豆沙拉油(調合油)", "18L",
-                    "20270414000403", 17
-                ],
-                [64, "慕拿食品股份有限公司", "新北市林口區粉寮路2段358-2號", "益康大豆沙拉油", "18L", "20270410000407", 248],
-                [65, "璟逸實業有限公司", "新北市林口區粉寮路2段358-2號", "益康大豆沙拉油(調合油)", "18L", "20270413000403",
-                83],
-                [66, "璟逸實業有限公司", "新北市林口區粉寮路2段358-2號", "益康大豆沙拉油(調合油)", "18L", "20270414000403",
-                33],
-                [67, "高聖泰國際企業有限公司", "新北市林口區湖北里泉湖52-11號", "益康大豆沙拉油", "18L", "20270410000407",
-                2970],
-                [68, "名陽食品有限公司", "新北市板橋區大觀路一段38巷156弄183號", "益康大豆沙拉油", "18L", "20270410000407",
-                1650],
-                [69, "名陽食品有限公司", "新北市板橋區大觀路一段38巷156弄183號", "益康大豆沙拉油(調合油)", "18L",
-                    "20270414000403", 17
-                ],
-                [70, "慕拿食品股份有限公司", "新北市林口區粉寮路2段358-2號", "益康大豆沙拉油", "18L", "20270410000407", 248],
-                [71, "璟逸實業有限公司", "新北市林口區粉寮路2段358-2號", "益康大豆沙拉油(調合油)", "18L", "20270413000403",
-                83],
-                [72, "璟逸實業有限公司", "新北市林口區粉寮路2段358-2號", "益康大豆沙拉油(調合油)", "18L", "20270414000403",
-                33],
-                [73, "高聖泰國際企業有限公司", "新北市林口區湖北里泉湖52-11號", "益康大豆沙拉油", "18L", "20270410000407",
-                2970],
-                [74, "香壽食品有限公司", "新北市泰山區中泰西路120巷7號", "益康大豆沙拉油", "18L", "20270413000403", 132],
-                [75, "香壽食品有限公司", "新北市泰山區中泰西路120巷7號", "益康大豆沙拉油", "18L", "20270413000403", 5940],
-                [76, "樂總食品企業社", "新北市新莊區自立路62-66號", "益康大豆沙拉油", "18L", "20270410000407", 1650],
-                [77, "樂總食品企業社", "新北市新莊區自立路62-66號", "益康大豆沙拉油(調合油)", "18L", "20270414000403", 33],
-                [78, "長福食品有限公司", "新北市新莊區福營路269號", "益康大豆沙拉油", "18L", "20270410000407", 1815],
-                [79, "長福食品有限公司", "新北市新莊區福營路269號", "益康大豆沙拉油(調合油)", "18L", "20270414000403", 413],
-                [80, "廣益維糧行", "新北市樹林區樹新路28巷7號", "益康大豆沙拉油", "18L", "20270410000407", 1815],
-                [81, "廣益維糧行", "新北市樹林區樹新路28巷7號", "益康大豆沙拉油", "18L", "20270410000407", 825],
-                [82, "廣益維糧行", "新北市樹林區樹新路28巷7號", "益康大豆沙拉油", "18L", "20270410000407", 660],
-                [83, "廣益維糧行", "新北市樹林區樹新路28巷7號", "益康大豆沙拉油(調合油)", "18L", "20270414000403", 330],
-                [84, "廣益維糧行", "新北市樹林區樹新路28巷7號", "益康大豆沙拉油(調合油)", "18L", "20270414000403", 17],
-                [85, "勁綵餐飲(股)公司", "新北市八德區福德一路237號", "益康大豆沙拉油", "18KG", "20270413000408", 1476],
-                [86, "沅隆食品有限公司", "桃園市大園區民生路130號", "益康大豆沙拉油", "18L", "20270410000407", 1650],
-                [87, "絲鋪貿易有限公司", "桃園市大園區故子林路93巷1號", "益康大豆沙拉油", "18L", "20270411000408", 6600],
-                [88, "遠達國際貿易有限公司", "桃園市大溪區湳路三段185巷95號", "益康大豆沙拉油", "18KG", "20270413000408", 2556],
-                [89, "泰源食品企業社", "桃園市大溪區月眉路15號1號", "益康大豆沙拉油", "18KG", "20270413000408", 54],
-                [90, "油晴團膳股份有限公司", "桃園市中壢區精村路75巷77號", "益康大豆沙拉油", "18L", "20270411000408", 4950],
-                [91, "野味食業有限公司", "桃園市中壢區南路四路75-33號", "益康大豆沙拉油", "18L", "20270411000408", 1650],
-                [92, "敏宏企業社", "桃園市中壢區南路四路271-33號", "益康大豆沙拉油", "18L", "20270410000407", 33],
-                [93, "山泠食業有限公司", "桃園市中壢區大路314號", "益康大豆沙拉油(調合油)", "18L", "20270414000403", 1650],
-                [94, "緯柏國際貿易有限公司", "桃園市中壢區國際路一段680巷105號", "益康大豆沙拉油", "18L", "20270410000407",
-                1650],
-                [95, "緯柏國際貿易有限公司", "桃園市中壢區國際路一段680巷105號", "益康大豆沙拉油(調合油)", "18L",
-                    "20270413000403", 33
-                ],
-                [96, "璩氏有限公司", "桃園市桃園區龍壽街191號", "益康大豆沙拉油", "18L", "20270413000403", 1650],
-                [97, "璩氏有限公司", "桃園市桃園區龍壽街191號", "益康大豆沙拉油", "18L", "20270413000403", 50],
-                [98, "富健食品有限公司", "桃園市桃園區暖東街293號", "益康大豆沙拉油", "18L", "20270410000407", 3300],
-                [99, "富健食品有限公司", "桃園市桃園區暖東街293號", "益康大豆沙拉油(調合油)", "18L", "20270413000403", 165],
-                [100, "芳水有限公司", "桃園市龍潭區三成路122號", "益康大豆沙拉油", "18L", "20270414000403", 825],
-                [101, "芳水有限公司", "桃園市龍潭區三成路122號", "益康大豆沙拉油(調合油)", "18L", "20270413000403", 17],
-                [102, "緯柏國際貿易有限公司", "桃園市中壢區國際路一段680巷105號", "益康大豆沙拉油", "18L", "20270410000407",
-                    1650
-                ],
-                [103, "緯柏國際貿易有限公司", "桃園市中壢區國際路一段680巷105號", "益康大豆沙拉油(調合油)", "18L",
-                    "20270413000403", 33
-                ],
-                [104, "璩氏有限公司", "桃園市桃園區龍壽街191號", "益康大豆沙拉油", "18L", "20270413000403", 1650],
-                [105, "璩氏有限公司", "桃園市桃園區龍壽街191號", "益康大豆沙拉油", "18L", "20270414000403", 50],
-                [106, "富健食品有限公司", "桃園市桃園區暖東街293號", "益康大豆沙拉油", "18L", "20270410000407", 3300],
-                [107, "富健食品有限公司", "桃園市桃園區暖東街293號", "益康大豆沙拉油(調合油)", "18L", "20270413000403", 165],
-                [108, "芳水有限公司", "桃園市龍潭區三成路122號", "益康大豆沙拉油", "18L", "20270414000403", 825],
-                [109, "芳水有限公司", "桃園市龍潭區三成路122號", "益康大豆沙拉油(調合油)", "18L", "20270413000403", 17],
-                [110, "建義食品有限公司", "桃園市屬地區一路92巷8號", "益康大豆沙拉油", "18L", "20270410000407", 792],
-                [111, "焦生食品有限公司", "新竹市北區菊濱路65號", "益康大豆沙拉油", "18L", "20270410000407", 1188],
-                [112, "焦生食品有限公司", "新竹市北區菊濱路65號", "益康大豆沙拉油", "18L", "20270410000407", 1650],
-                [113, "焦生食品有限公司", "新竹市北區菊濱路65號", "益康大豆沙拉油(調合油)", "18L", "20270413000403", 990],
-                [114, "曇所商行", "新竹市東大路3段20之1號", "益康大豆沙拉油", "18L", "20270410000407", 4950],
-                [115, "曇所商行", "新竹市東大路3段20之1號", "益康大豆沙拉油(調合油)", "18L", "20270413000403", 99],
-                [116, "御品國際餐飲股份有限公司", "新竹市香山區手南路540號", "益康大豆沙拉油", "18L", "20270410000407", 1320],
-                [117, "泰恩股份有限公司", "新竹縣關西鎮文興路一段338號", "益康大豆沙拉油", "18L", "20270411000408", 165],
-                [118, "大貫家農產有限公司大里角分公司", "台中市大里區阿興路2段710號", "益康大豆沙拉油", "18L", "20270410000407",
-                    1980
-                ],
-                [119, "寶妹食品有限公司", "台中市太平區新光里1112巷16號", "益康大豆沙拉油(調合油)", "18L", "20270413000403",
-                    182
-                ],
-                [120, "溫爻蟲海鮮漁港店", "台中市清水區海濱里路251號", "益康大豆沙拉油", "18L", "20270410000407", 66],
-                [121, "美食家食材通路股份有限公司", "台中市烏日區學田路251號", "益康大豆沙拉油", "18L", "20270410000407", 3548],
-                [122, "美食家食材通路股份有限公司", "台中市烏日區學田路251號", "益康大豆沙拉油", "18L", "20270410000407", 1403],
-                [123, "美食家食材通路股份有限公司", "台中市烏日區學田路251號", "益康大豆沙拉油", "18L", "20270411000408", 4868],
-                [124, "美食家食材通路股份有限公司", "台中市烏日區學田路251號", "益康大豆沙拉油", "18L", "20270411000408", 3053],
-                [125, "美食家食材通路股份有限公司", "台中市烏日區學田路251號", "益康大豆沙拉油(調合油)", "18L",
-                    "20270413000403", 990
-                ],
-                [126, "永嘯罄商行", "台中市大甲區信義路44號", "益康大豆沙拉油", "18L", "20270410000407", 825],
-                [127, "永嘯罄商行", "台中市大甲區信義路44號", "益康大豆沙拉油", "18L", "20270411000408", 363],
-                [128, "永嘯罄商行", "台中市大甲區信義路44號", "益康大豆沙拉油", "18KG", "20270413000408", 1080],
-                [129, "永嘯罄商行", "台中市大甲區信義路44號", "益康大豆沙拉油(調合油)", "18L", "20270413000403", 17],
-                [130, "泳閱通", "台中市大甲區義中和文正路598巷5號", "益康大豆沙拉油", "18KG", "20270413000408", 972],
-                [131, "富達食品有限公司", "台中市太保區泣田路1段251號", "益康大豆沙拉油", "18L", "20270413000403", 1890],
-                [132, "富達食品有限公司", "台中市太保區泣田路1段251號", "益康大豆沙拉油", "18L", "20270413000403", 18],
-                [133, "味源股份有限公司", "台中市大里區中山路483巷79號", "益康大豆沙拉油", "18L", "20270410000407", 2970],
-                [134, "長蟲商行", "台中市大雅區三和里泛79號", "益康大豆沙拉油", "18L", "20270411000408", 6930],
-                [135, "長蟲商行", "台中市大雅區三和里泛79號", "益康大豆沙拉油", "18L", "20270411000408", 1980],
-                [136, "長蟲商行", "台中市大雅區三和里泛79號", "益康大豆沙拉油(調合油)", "18L", "20270413000403", 99],
-                [137, "傅嘉詮企業有限公司", "台中市大雅區雅泰23路24號", "益康大豆沙拉油", "18KG", "20270413000408", 1080],
-                [138, "頂福食品股份有限公司", "台中市工業區23路24號", "益康大豆沙拉油", "18L", "20270410000407", 4125],
-                [139, "連興油行", "台中市西區區仁里段仁安路45號", "益康大豆沙拉油", "18L", "20270410000407", 825],
-                [140, "連興油行", "台中市西區區仁里段仁安路45號", "益康大豆沙拉油", "18L", "20270410000407", 446],
-                [141, "連興油行", "台中市西區區仁里段仁安路45號", "益康大豆沙拉油", "18L", "20270411000408", 578],
-                [142, "旭安國際有限公司", "台中市西屯區中港路2038-7號", "益康大豆沙拉油", "18L", "20270410000407", 2475],
-                [143, "旭安國際有限公司", "台中市西屯區中港路2038-7號", "益康大豆沙拉油", "18L", "20270411000408", 66],
-                [144, "套運商行", "台中市沙鹿區林境里北街442號", "益康大豆沙拉油", "18L", "20270411000408", 8910],
-                [145, "陳僑原", "台中市沙鹿區虎境里段18號", "益康大豆沙拉油", "18L", "20270411000408", 83],
-                [146, "陳僑原", "台中市沙鹿區虎境里段18號", "益康大豆沙拉油", "18L", "20270411000408", 1320],
-                [147, "陳僑原", "台中市沙鹿區虎境里段18號", "益康大豆沙拉油(調合油)", "18L", "20270413000403", 33],
-                [148, "竹記有限公司", "台中市東區大公街43號2樓", "益康大豆沙拉油", "18L", "20270410000407", 3960],
-                [149, "竹記有限公司", "台中市東區大公街43號2樓", "益康大豆沙拉油", "18L", "20270411000408", 83],
-                [150, "杰旭有限公司", "台中市東區自由四段396號", "益康大豆沙拉油", "18L", "20270410000407", 2475],
-                [151, "杰旭有限公司", "台中市東區自由四段396號", "益康大豆沙拉油", "18L", "20270411000408", 1650],
-                [152, "杰旭有限公司", "台中市東區自由四段396號", "益康大豆沙拉油(調合油)", "18L", "20270413000403", 825],
-                [153, "金食在食材有限公司", "台中市烏日區溪南一段680巷526弄36號", "益康大豆沙拉油", "18L", "20270410000407",
-                    2970
-                ],
-                [154, "金食在食材有限公司", "台中市烏日區溪南一段680巷526弄36號", "益康大豆沙拉油", "18L", "20270411000408",
-                    66
-                ],
-                [155, "金食在食材有限公司", "台中市烏日區溪南一段680巷526弄36號", "益康大豆沙拉油", "18L", "20270411000408",
-                    99
-                ],
-                [156, "金食在食材有限公司", "台中市烏日區溪南一段680巷526弄36號", "益康大豆沙拉油(調合油)", "18L",
-                    "20270414000403", 132
-                ],
-                [157, "品欣食品商行", "台中市神岡區中山路228號1樓", "益康大豆沙拉油(調合油)", "18L", "20270414000403", 50],
-                [158, "摩鼓時", "台中市清水區坤發路414-1號", "益康大豆沙拉油", "18KG", "20270413000408", 720],
-                [159, "明呈商行", "台中市潭子區抽新路66-7號", "益康大豆沙拉油", "18L", "20270410000407", 825],
-                [160, "明呈商行", "台中市潭子區抽新路66-7號", "益康大豆沙拉油", "18L", "20270410000407", 17],
-                [161, "豆盛洋行", "台倉地址：台中市太平水湳路109巷14號", "益康大豆沙拉油", "18L", "20270410000407", 446],
-                [162, "豆盛洋行", "台倉地址：台中市太平水湳路109巷14號", "益康大豆沙拉油", "18L", "20270410000407", 33],
-                [163, "佳嫂先洗餐具商行", "彰化縣員林新生里芳苑384號1樓", "益康大豆沙拉油", "18L", "20270411000408", 1225],
-                [164, "佳嫂先洗餐具商行", "彰化縣員林新生里芳苑384號1樓", "益康大豆沙拉油", "18L", "20270411000408", 1390],
-                [165, "巧福實業股份有限公司", "彰化縣北斗鎮興工路9-6號", "益康大豆沙拉油", "18KG", "20270413000408", 18],
-                [166, "巧福實業股份有限公司", "彰化縣北斗鎮興工路9-6號", "益康大豆沙拉油(調合油)", "18L", "20270413000403",
-                50],
-                [167, "清春行", "彰化縣秀水鄉山路116號", "益康大豆沙拉油", "18L", "20270411000408", 5775],
-                [168, "福嘯發商行", "彰化縣秀水鄉泉庭路安南巷118號", "益康大豆沙拉油", "18L", "20270414000403", 149],
-                [169, "福嘯發商行", "彰化縣秀水鄉泉庭路安南巷118號", "益康大豆沙拉油", "18L", "20270414000403", 99],
-                [170, "暫安行", "彰化縣秀水鄉柔仙台街368-1號", "益康大豆沙拉油", "18L", "20270413000403", 99],
-                [171, "和誠實業有限公司", "彰化縣秀水鄉黑昭路山路275號", "益康大豆沙拉油", "18L", "20270413000403", 17],
-                [172, "和誠實業有限公司", "彰化縣秀水鄉黑昭路山路275號", "益康大豆沙拉油", "18L", "20270413000403", 1650],
-                [173, "上發行", "彰化縣彰化市西區路175巷121弄150號", "益康大豆沙拉油", "18L", "20270410000407", 1650],
-                [174, "上發行", "彰化縣彰化市西區路175巷121弄150號", "益康大豆沙拉油", "18L", "20270413000403", 99],
-                [175, "大之興總匯商行林桑營業所", "彰化縣彰化市興安路一段139號", "益康大豆沙拉油", "18KG", "20270413000408",
-                    4950
-                ],
-                [176, "大之興總匯商行林桑營業所", "彰化縣彰化市興安路一段139號", "益康大豆沙拉油", "18L", "20270413000403",
-                99],
-                [177, "黃嵐以", "彰化縣秀水鄉水秀路36巷32號", "益康大豆沙拉油", "18L", "20270413000403", 1650],
-                [178, "黃嵐以", "彰化縣秀水鄉水秀路36巷32號", "益康大豆沙拉油(調合油)", "18L", "20270413000403", 990],
-                [179, "台灣卜蜂企業股份有限公司南投肉品加工廠", "南投縣南投市工業東路17號", "益康大豆沙拉油", "18L",
-                    "20270413000403", 825
-                ],
-                [180, "都源國際股份有限公司", "南投縣埔里鎮成功街48號", "益康大豆沙拉油(調合油)", "18L", "20270414000403",
-                17],
-                [181, "都源國際股份有限公司", "南投縣埔里鎮成功街48號", "益康大豆沙拉油(調合油)", "18L", "20270413000403",
-                83],
-                [182, "祥鑫食品有限公司", "南投縣草屯鎮炮子老菜卡老路三段68號", "益康大豆沙拉油", "18L", "20270413000403",
-                1155],
-                [183, "祥鑫食品有限公司", "南投縣草屯鎮炮子老菜卡老路三段68號", "益康大豆沙拉油", "18L", "20270413000403",
-                495],
-                [184, "樺柏股份有限公司", "雲林縣土庫鎮新五街14號", "益康大豆沙拉油", "18KG", "20270413000408", 2160],
-                [185, "味土股份有限公司", "雲林縣大埤鄉大埤路18號", "益康大豆沙拉油", "18KG", "20270413000408", 165],
-                [186, "久代商行", "雲林縣斗南鎮利民村3之11弄", "益康大豆沙拉油", "18KG", "20270413000408", 5400],
-                [187, "越鑫食品有限公司", "嘉義縣中埔鄉隆興段8-3號", "益康大豆沙拉油", "18L", "20270413000403", 495],
-                [188, "越鑫食品有限公司", "嘉義縣中埔鄉隆興段8-3號", "益康大豆沙拉油", "18L", "20270413000403", 33],
-                [189, "得新商行", "台南市永康區大灣路137號", "益康大豆沙拉油", "18L", "20270411000408", 1650],
-                [190, "宏原行", "台南市新市區大堂路313號", "益康大豆沙拉油", "18L", "20270411000408", 1221],
-                [191, "宏原行", "台南市新市區大堂路313號", "益康大豆沙拉油", "18L", "20270411000408", 429],
-                [192, "宏原行", "台南市新市區大堂路313號", "益康大豆沙拉油(調合油)", "18L", "20270414000403", 17],
-                [193, "漁隆貿易企業社", "台南市麻豆區大學路文興46號", "益康大豆沙拉油", "18L", "20270410000407", 5940],
-                [194, "漁隆貿易企業社", "台南市麻豆區大學路文興46號", "益康大豆沙拉油", "18L", "20270410000407", 990],
-                [195, "漁隆貿易企業社", "台南市麻豆區大學路文興46號", "益康大豆沙拉油", "18L", "20270411000408", 1980],
-                [196, "漁隆貿易企業社", "台南市麻豆區大學路文興46號", "益康大豆沙拉油", "18L", "20270411000408", 1980],
-                [197, "漁隆貿易企業社", "台南市麻豆區大學路文興46號", "益康大豆沙拉油", "18L", "20270413000403", 990],
-                [198, "漁隆貿易企業社", "台南市麻豆區大學路文興46號", "益康大豆沙拉油", "18L", "20270413000403", 83],
-                [199, "漁隆貿易企業社", "台南市麻豆區大學路文興46號", "益康大豆沙拉油", "18L", "20270413000403", 1898],
-                [200, "漁隆貿易企業社", "台南市麻豆區大學路文興46號", "益康大豆沙拉油", "18L", "20270413000403", 990],
-                [201, "漁隆貿易企業社", "台南市麻豆區大學路文興46號", "益康大豆沙拉油", "18L", "20270414000403", 363],
-                [202, "爭鮮股份有限公司", "高雄市岡山區路德港19號", "益康大豆沙拉油", "18L", "20270413000403", 1980],
-                [203, "袖柱有限公司", "高雄市大寮區興頭五街63號", "益康大豆沙拉油", "18L", "20270413000403", 99],
-                [204, "袖柱有限公司", "高雄市大寮區興頭五街63號", "益康大豆沙拉油", "18L", "20270413000403", 990],
-                [205, "台灣好明食品股份有限公司", "屏東縣枋寮鄉柯村興路18號", "益康大豆沙拉油", "18L", "20270411000408",
-                1485],
-                [206, "孟益食品有限公司", "宜蘭縣五結鄉330號1樓", "益康大豆沙拉油", "18L", "20270410000407", 1650],
-                [207, "孟益食品有限公司", "宜蘭縣五結鄉330號1樓", "益康大豆沙拉油", "18L", "20270410000407", 33],
-                [208, "翊發商行", "宜蘭縣宜蘭市中山路二段132號", "益康大豆沙拉油", "18L", "20270410000407", 2624],
-                [209, "誠敏商行", "宜蘭縣宜蘭市建軍里恭山路211巷15號一樓", "益康大豆沙拉油", "18L", "20270410000407", 1650],
-                [210, "誠敏商行", "宜蘭縣宜蘭市建軍里恭山路211巷15號一樓", "益康大豆沙拉油", "18KG", "20270413000408", 7200],
-                [211, "惠票食品工業有限公司", "宜蘭縣蘇澳鎮頂路270巷2弄6號", "益康大豆沙拉油", "18KG", "20270413000408",
-                2124],
-                [212, "惠票食品工業有限公司", "宜蘭縣蘇澳鎮頂路270巷2弄6號", "益康大豆沙拉油", "18KG", "20270413000408",
-                144],
-                [213, "隆盛食品冷凍食品有限公司", "宜蘭縣蘇澳鎮頂路270巷2弄6號", "益康大豆沙拉油", "18KG", "20270413000408",
-                    2970
-                ],
-                [214, "隆盛食品冷凍食品有限公司", "宜蘭縣蘇澳鎮頂路270巷2弄6號", "益康大豆沙拉油", "18L", "20270414000403",
-                    3294
-                ],
-                [215, "相正企業有限公司", "花蓮縣吉安鄉北昌村和平路1段138號", "益康大豆沙拉油", "18L", "20270413000403",
-                3390],
-                [216, "相正企業有限公司", "花蓮縣吉安鄉北昌村和平路1段138號", "益康大豆沙拉油(調合油)", "18L",
-                    "20270413000403", 198
-                ],
-                [217, "相正企業有限公司", "花蓮縣吉安鄉北昌村和平路1段138號", "益康大豆沙拉油(調合油)", "18L",
-                    "20270414000403", 132
-                ],
-                [218, "聯益商行", "金門縣金城鎮西門里民權路88號", "益康大豆沙拉油(調合油)", "18L", "20270413000403", 17],
-                [219, "零售-謝棋齡", "雲林縣古坑鄉真理街稻園大路204巷", "益康大豆沙拉油", "18L", "20270410000407", 413],
-                [220, "零售-陳建同", "(地址不詳)", "益康大豆沙拉油", "", "20270411000408", 825],
-                [221, "零售-民旭工業股份有限公司", "高雄市大寮區風屏二路38號", "益康大豆沙拉油", "18L", "20270411000408", 17],
-                [222, "零售-民旭工業股份有限公司", "高雄市大寮區風屏二路38號", "益康大豆沙拉油", "18L", "20270413000403", 50],
-                [223, "大祈壯社福金會", "(地址不詳)", "益康大豆沙拉油", "", "20270410000407", 50],
-                [224, "希佛慈心悲善基金會", "(地址不詳)", "益康大豆沙拉油(調合油)", "", "20270413000403", 33]
-            ],
-            // --- 表四：福壽實業 (86筆) ---
-            fushou_list: [
-                [1, "新祥紀食品有限公司", "台北市士林區延平北路八段2巷151弄41號", "沙拉油 18L 桶", "C21604260"],
-                [2, "勤新貿易有限公司", "台北市士林區延平北路八段2巷151弄41號", "沙拉油-塑桶 3L 桶", "C1160426K"],
-                [3, "新祥紀食品有限公司", "台北市士林區延平北路八段2巷151弄41號", "沙拉油 18L 桶", "C21604260"],
-                [4, "李坤憲", "台北市中正區汀州路1段136號", "沙拉油 18L 桶", "C21604260"],
-                [5, "邱煒玲", "台北市內湖區安康路246號", "沙拉油-塑桶 3L 桶", "C1160426K"],
-                [6, "聯友食品免洗有限公司", "台北市內湖區安康路246號", "沙拉油 18L 桶", "C21604260"],
-                [7, "聯友食品免洗有限公司", "台北市內湖區安康路246號", "沙拉油 18L 桶", "C21604260"],
-                [8, "舊糧企業社", "新北市三重區三張街111之1樓", "沙拉油-塑桶 3L 桶", "C21604260"],
-                [9, "津鑫有限公司", "新北市三重區新北大道興洋街45號4樓", "健味香油 3L 桶", "EL150426L"],
-                [10, "曇族世家企業股份有限公司", "新北市土城區興洋街17號", "沙拉油 18L 桶", "C21604260"],
-                [11, "利安食店", "新北市土城區興城八路142號", "沙拉油-塑桶 3L 桶", "C1160426K"],
-                [12, "吉璽雜糧行", "新北市中和區建城八路142號", "沙拉油 18L 桶", "C21604260"],
-                [13, "吉璽雜糧行", "新北市中和區建城八路142號", "健味香油 3L 桶", "EL150426L"],
-                [14, "帛盈貿易有限公司", "新北市中和區建城345號3樓", "沙拉油-塑桶 3L 桶", "C1160426K"],
-                [15, "明克食品有限公司", "新北市中和區景平路634-9號", "沙拉油 18L 桶", "C21604260"],
-                [16, "明克食品有限公司", "新北市中和區景平路634-9號", "沙拉油 18L 桶", "C21604260"],
-                [17, "明克食品有限公司", "新北市中和區景平路634-9號", "沙拉油 18L 桶", "C21604260"],
-                [18, "元太興有限公司", "新北市永和區保平路50巷8之6號", "沙拉油 18L 桶", "C21604260"],
-                [19, "鼎柚有限公司", "新北市永和區國中路50號", "沙拉油-塑桶 3L 桶", "C1160426K"],
-                [20, "家品商行", "新北市板橋區正義路325巷3弄8號", "健味香油 3L 桶", "EL150426L"],
-                [21, "山造企業有限公司", "新北市板橋區民治路81巷3號1樓", "沙拉油 18L 桶", "C21604260"],
-                [22, "楊維仁", "新北市板橋區懷德街15號", "沙拉油-塑桶 3L 桶", "C1160426K"],
-                [23, "景昌商行", "新北市板橋區懷德街233巷17弄1號", "沙拉油 18L 桶", "C21604260"],
-                [24, "景昌商行", "新北市板橋區懷德街233巷17弄1號", "沙拉油 18L 桶", "C2160426P"],
-                [25, "景昌商行", "新北市板橋區懷德街233巷17弄1號", "沙拉油 18L 桶", "C21604260"],
-                [26, "安毅食品有限公司", "新北市林口區勢四街71-1號", "沙拉油-塑桶 3L 桶", "C1160426K"],
-                [27, "高聖泰國際企業有限公司", "新北市林口區湖北里泉湖52之2號", "沙拉油 18L 桶", "C21604260"],
-                [28, "尚俊食品有限公司", "新北市新店區安泰路45之2號", "沙拉油-塑桶 3L 桶", "C1160426K"],
-                [29, "鴻記娛聯樂快烙店", "新北市新店區自由28號", "沙拉油 18L 桶", "C21604260"],
-                [30, "雀頹雞餐行", "新北市樹林區興安街232號", "沙拉油-塑桶 3L 桶", "C1160426K"],
-                [31, "禾禾國際貿易有限公司", "新北市樹林區田尾街1段192號", "沙拉油 18L 桶", "C21604260"],
-                [32, "沆隆有限公司", "桃園市大園區民生路130號", "沙拉油-塑桶 3L 桶", "C1160426K"],
-                [33, "建樹-桃園", "桃園市中壢區合川路二段366巷70弄37號", "健味香油 3L 桶", "EL150426L"],
-                [34, "明星有限公司", "桃園市桃園區民生路582號", "沙拉油 18L 桶", "C21604260"],
-                [35, "詹逸有限公司", "桃園市桃園區民生路622號", "沙拉油 18L 桶", "C21604260"],
-                [36, "紫小紅", "新竹市蟠龍區大竹路426-2號", "健味香油 3L 桶", "EL150426L"],
-                [37, "典佳食品股份有限公司", "新竹市東區千甲191號", "沙拉油 18L 桶", "C21604260"],
-                [38, "旺旺采金山有限公司", "新竹市關東里復路一段154號1樓", "沙拉油 18L 桶", "C21604260"],
-                [39, "元珅有限公司", "新竹市香山區大庄西濱路三段250號1樓", "沙拉油 18L 桶", "C21604260"],
-                [40, "竹埼食品股份有限公司", "新竹縣竹北市溪州路246巷28號", "沙拉油 18L 桶", "C2150426P"],
-                [41, "鑫邑商行", "新竹縣湖口鄉八路232-1號", "沙拉油 18L 桶", "C21604260"],
-                [42, "詮佑食品股份有限公司", "苗栗縣苑裡鎮竹南99-2號", "沙拉油-塑桶 3L 桶", "C1160426K"],
-                [43, "仁偉商行", "台中市大里區美湖路二段196號", "沙拉油 18L 桶", "C21604260"],
-                [44, "米谷合作社", "台中市大里區美湖路196號", "沙拉油 18L 桶", "C21604260"],
-                [45, "國成食品有限公司", "台中市北屯區崇順順興路二段179號1樓", "沙拉油-塑桶 3L 桶", "C1160426K"],
-                [46, "詠益商行", "台中市西屯區西安西路二段297之2巷8之20號1樓", "沙拉油-塑桶 3L 桶", "C1160426K"],
-                [47, "詠益商行", "台中市西屯區西安西路二段297之2巷8之20號1樓", "沙拉油 18L 桶", "C2150426P"],
-                [48, "連興油行", "台中市西屯區安美路二段45號", "沙拉油 18L 桶", "C21604260"],
-                [49, "連興油行", "台中市西屯區安美路二段45號", "沙拉油 18L 桶", "C21604260"],
-                [50, "泰運有限公司", "台中市沙鹿區竹林里福田北街442號1樓", "沙拉油-塑桶 3L 桶", "C1160426K"],
-                [51, "泰運有限公司", "台中市沙鹿區竹林里福田北街442號1樓", "沙拉油 18L 桶", "C21604260"],
-                [52, "泰運有限公司", "台中市沙鹿區竹林里福田北街442號1樓", "沙拉油-塑桶 3L 桶", "C2150426P"],
-                [53, "福大興有限公司", "台中市沙鹿區新生33號", "沙拉油 18L 桶", "C21604260"],
-                [54, "永昌油雞舖有限公司", "台中市沙鹿區興仁四平街34之6號", "沙拉油-塑桶 3L 桶", "C1160426K"],
-                [55, "群用企業有限公司", "台中市沙鹿區大同街18之2號", "沙拉油 18L 桶", "C21604260"],
-                [56, "竹記有限公司", "台中市東區里大公街43號2樓", "健味香油 3L 桶", "EL150426L"],
-                [57, "和信有限公司", "台中市南屯區建南路192號", "沙拉油 18L 桶", "C21604260"],
-                [58, "鼎麒國際企業有限公司", "台中市烏日區光暐路38號", "沙拉油-塑桶 3L 桶", "C1160426K"],
-                [59, "鼎麒國際企業有限公司", "台中市烏日區光暐路38號", "沙拉油 18L 桶", "C21604260"],
-                [60, "金食在食材有限公司", "台中市烏日區溪南一段680巷526弄36號", "沙拉油-塑桶 3L 桶", "C1160426K"],
-                [61, "金食在食材有限公司", "台中市烏日區溪南一段680巷526弄36號", "沙拉油 18L 桶", "C21604260"],
-                [62, "美食家食材通路(股)公司", "台中市烏日區學田里14鄰中央路2段528號", "沙拉油-塑桶 3L 桶", "C1160426K"],
-                [63, "美食家食材通路(股)公司", "台中市烏日區學田里14鄰中央路2段528號", "沙拉油 18L 桶", "C21604260"],
-                [64, "李美滿", "台中市梧棲區湖里14鄰中央路2段528號", "沙拉油 18L 桶", "C21604260"],
-                [65, "李美滿", "台中市梧棲區湖里14鄰中央路2段528號", "沙拉油-塑桶 3L 桶", "C21604260"],
-                [66, "森所商行有限公司", "台中市豐原區林苑路282號", "沙拉油 18L 桶", "C21604260"],
-                [67, "志宏食品股份有限公司", "彰化縣秀水鄉福興村中山路507號", "沙拉油-塑桶 3L 桶", "C1160426K"],
-                [68, "志宏食品股份有限公司", "彰化縣秀水鄉福興村中山路507號", "沙拉油 18L 桶", "C21604260"],
-                [69, "上仁鑫商行", "彰化縣鹿港鄉一重埔路284號1樓", "沙拉油-塑桶 3L 桶", "C2150426P"],
-                [70, "旺真久企業商行", "南投縣草屯鎮北投里北北投路教軟巷26弄8號2樓", "沙拉油 18L 桶", "C1160426K"],
-                [71, "旺真久企業商行", "南投縣草屯鎮北投里北北投路教軟巷26弄8號2樓", "健味香油 3L 桶", "EL150426L"],
-                [72, "祥鑫食品有限公司", "南投縣草屯鎮草炮子老菜卡老路三段68號", "沙拉油 18L 桶", "C21604260"],
-                [73, "南門食品原料有限公司", "雲林縣六水源永康路68號1樓", "沙拉油 18L 桶", "C21504260"],
-                [74, "漢賢粉行", "嘉義市東區翻陽街122號", "沙拉油 18L 桶", "C21504260"],
-                [75, "漢賢粉行", "嘉義市東區翻陽街122號", "沙拉油-塑桶 3L 桶", "C1160426K"],
-                [76, "漢賢粉行", "嘉義市東區翻陽街122號", "沙拉油 18L 桶", "C21604260"],
-                [77, "典佶商行有限公司", "台南市永康區大灣東街330巷35號", "健味香油 3L 桶", "EL150426L"],
-                [78, "日盛", "台南市永康區崇仁路二70號", "沙拉油 18L 桶", "C21504260"],
-                [79, "黃耀德", "台南市白河區永安路溪64號", "沙拉油-塑桶 3L 桶", "C1160426K"],
-                [80, "黃耀德", "台南市白河區永安路溪64號", "沙拉油 18L 桶", "C21604260"],
-                [81, "鴻建鑫企業", "台南市安區崇祈路中營58巷1樓", "沙拉油 18L 桶", "C21604260"],
-                [82, "現兒-大壯營業所", "高雄市大壯區中山路521之2號", "健味香油 3L 桶", "EL150426L"],
-                [83, "黃志堅", "高雄市小港區莊路159-1號", "沙拉油 18L 桶", "C21604260"],
-                [84, "黃志堅", "高雄市小港區莊路159-1號", "沙拉油 18L 桶", "C21604260"],
-                [85, "冠頂食材股份有限公司", "高雄市仁武區旺南街南昌1號", "沙拉油 18L 桶", "C21604260"],
-                [86, "味擴食材股份有限公司", "高雄市仁武區旺南街南昌1號", "健味香油 3L 桶", "EL150426L"]
-            ],
-            // --- 新聞 ---
-            news: [
-                { date: "2026-07-04", title: "截至7/3中午，累計回收約17.4公噸，占1300公噸總出貨量比例仍低" },
-                { date: "2026-07-03",
-                title: "卜蜂使用問題油品製成56項熟食及加工食品（雞胸肉、義大利麵、炒飯等），約4950公斤，全面下架回收至7/17" },
-                { date: "2026-07-03", title: "味王8項泡麵油包（原汁牛肉湯麵、紅燒牛肉湯麵等）受影響，回收退貨至8/31" },
-                { date: "2026-07-03",
-                    title: "聯華食品：僅2項自有商品（荷卡炙燒明太子鮭魚烤飯糰、荷卡極上經典飯糰冷凍商品）受影響，可樂果、卡迪那等零食系列未使用問題油品" },
-                { date: "2026-07-02",
-                    title: "台中市食安處公布首波福壽、福懋下游業者名單，共224家，含王品集團、老協珍、桂冠、路易莎、爭鮮、晶華酒店等" },
-                { date: "2026-07-02",
-                    title: "食藥署：下游加工成品（雞塊、沙拉醬等）風險評估後暫不列入強制下架範圍，僅下架第一層油品及分裝油品" },
-                { date: "2026-07-02", title: "福壽初估損失8000萬至9000萬元，將向中聯求償；福懋損失統計中" },
-                { date: "2026-07-01",
-                title: "食藥署公布：中聯油脂供應福懋約588公噸、福壽約421公噸、泰山約291公噸，共1300公噸問題大豆沙拉油" },
-                { date: "2026-06-30", title: "中聯油脂主動通報大豆沙拉油苯駢芘（BaP）超標，啟動回收機制" }
-            ]
-        };
+</main>
 
-        // ================================================================
-        //  2. 核心邏輯
-        // ================================================================
-        var currentData = [];
-        var filteredData = [];
-        var currentPage = 1;
-        var pageSize = 15;
-        var currentSort = { key: 'company', asc: true };
-        var currentSource = 'all';
+<footer class="site-footer">
+  <div class="container text-center small">
+    本站為消費者自製資訊整理工具，非官方網站，資料若有誤，敬請協助<a href="mailto:one29382165@gmail.com">回報</a>。
+  </div>
+</footer>
 
-        // 合併所有資料 (標準化)
-        function buildFullData() {
-            var list = [];
-            // 自有品牌
-            DATA.recalled_products.forEach(function(p) {
-                list.push({
-                    company: p.brand,
-                    address: '',
-                    product: p.product,
-                    batch: p.batch,
-                    spec: p.spec || '-',
-                    source: '自有品牌',
-                    _raw: p
-                });
-            });
-            // 福懋散裝
-            DATA.fumao_bulk.forEach(function(row) {
-                list.push({
-                    company: row[0],
-                    address: row[1],
-                    product: row[2],
-                    batch: row[3],
-                    spec: row[4] + 'kg',
-                    source: '福懋散裝',
-                    _raw: row
-                });
-            });
-            // 福懋桶裝
-            DATA.fumao_barrel.forEach(function(row) {
-                list.push({
-                    company: row[1],
-                    address: row[2],
-                    product: row[3],
-                    batch: row[5],
-                    spec: row[4],
-                    source: '福懋桶裝',
-                    _raw: row
-                });
-            });
-            // 福壽
-            DATA.fushou_list.forEach(function(row) {
-                list.push({
-                    company: row[1],
-                    address: row[2],
-                    product: row[3],
-                    batch: row[4],
-                    spec: '-',
-                    source: '福壽',
-                    _raw: row
-                });
-            });
-            return list;
-        }
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+<!-- <script src="js/data.js"></script>
+<script src="js/app.js"></script> -->
+<script>
 
-        currentData = buildFullData();
-        document.getElementById('totalRecordsCount').textContent = currentData.length;
+// 本檔案為靜態資料，供 index.html 直接載入使用（避免本機開啟 file:// 時的 CORS 限制）
+const OIL_DATA = {
+  "meta": {
+    "title": "中聯油脂苯駢芘超標事件 消費者查詢工具",
+    "source_note": "資料來源：官方/業者公告PDF（油品品項1150703、泰山下游名單-臺中市1150703、福壽下游名單-依縣市排列-1150703、福懋下游名單-依縣市排列-桶裝1150702、福懋下游名單-依縣市排列-散裝1150702）。本工具為社群自製整理，非官方系統，正確性請以衛福部食藥署（fda.gov.tw）及地方衛生局最新公告為準。",
+    "batch_root": "315-1150404（原料批號 0409315）",
+    "bap_value": "8.1 μg/kg（法規限量 2.0 μg/kg，超標約4.05倍）",
+    "last_updated": "2026-07-04"
+  },
+  "recalled_products": [
+    {
+      "brand": "福壽實業",
+      "product": "福壽大豆沙拉油 3L",
+      "batch": "C1140426K",
+      "expiry": "2027.04.13"
+    },
+    {
+      "brand": "福壽實業",
+      "product": "福壽大豆沙拉油 3L",
+      "batch": "C1160426K",
+      "expiry": "2027.04.15"
+    },
+    {
+      "brand": "福壽實業",
+      "product": "福壽大豆沙拉油 18L",
+      "batch": "C2140426O",
+      "expiry": "2027.04.13"
+    },
+    {
+      "brand": "福壽實業",
+      "product": "福壽大豆沙拉油 18L",
+      "batch": "C2140426P",
+      "expiry": "2027.04.13"
+    },
+    {
+      "brand": "福壽實業",
+      "product": "福壽大豆沙拉油 18L",
+      "batch": "C2150426O",
+      "expiry": "2027.04.14"
+    },
+    {
+      "brand": "福壽實業",
+      "product": "福壽大豆沙拉油 18L",
+      "batch": "C2150426P",
+      "expiry": "2027.04.14"
+    },
+    {
+      "brand": "福壽實業",
+      "product": "福壽大豆沙拉油 18L",
+      "batch": "C2160426O",
+      "expiry": "2027.04.15"
+    },
+    {
+      "brand": "福壽實業",
+      "product": "福壽大豆沙拉油 18L",
+      "batch": "C2160426P",
+      "expiry": "2027.04.15"
+    },
+    {
+      "brand": "福壽實業",
+      "product": "福壽大豆沙拉油 18L",
+      "batch": "C2210426O",
+      "expiry": "2027.04.20"
+    },
+    {
+      "brand": "福壽實業",
+      "product": "福壽健味香油 3L",
+      "batch": "BL150426L",
+      "expiry": "2028.04.05"
+    },
+    {
+      "brand": "福壽實業",
+      "product": "福壽健味香油 3L",
+      "batch": "BL240426L",
+      "expiry": "2028.04.19"
+    },
+    {
+      "brand": "福壽實業",
+      "product": "青果多酚精華調合油 2L（僅外銷）",
+      "batch": "BL140426A",
+      "expiry": "2028.03.12"
+    },
+    {
+      "brand": "福懋油脂",
+      "product": "益康大豆沙拉油 18L",
+      "batch": "20270410000407",
+      "expiry": "2027.04.10"
+    },
+    {
+      "brand": "福懋油脂",
+      "product": "益康大豆沙拉油 18L",
+      "batch": "20270411000408",
+      "expiry": "2027.04.11"
+    },
+    {
+      "brand": "福懋油脂",
+      "product": "益康大豆沙拉油 18KG",
+      "batch": "20270413000408",
+      "expiry": "2027.04.13"
+    },
+    {
+      "brand": "福懋油脂",
+      "product": "益康烹調油 18L",
+      "batch": "20270413000403",
+      "expiry": "2027.04.13"
+    },
+    {
+      "brand": "福懋油脂",
+      "product": "益康烹調油 18L",
+      "batch": "20270414000403",
+      "expiry": "2027.04.14"
+    },
+    {
+      "brand": "福懋油脂",
+      "product": "一級黃豆油",
+      "batch": "202604081315",
+      "expiry": "2026.10.04"
+    },
+    {
+      "brand": "福懋油脂",
+      "product": "一級黃豆油",
+      "batch": "202604091315",
+      "expiry": "2026.10.04"
+    },
+    {
+      "brand": "福懋油脂",
+      "product": "一級黃豆油",
+      "batch": "202604101315",
+      "expiry": "2026.10.04"
+    },
+    {
+      "brand": "泰山企業",
+      "product": "金酥耐炸油 18L",
+      "batch": "2027040801",
+      "expiry": "2027.04.08"
+    },
+    {
+      "brand": "泰山企業",
+      "product": "沙拉油 18L",
+      "batch": "2027040901",
+      "expiry": "2027.04.09"
+    },
+    {
+      "brand": "泰山企業",
+      "product": "環保鐵桶沙拉油 18kg",
+      "batch": "2027040901",
+      "expiry": "2027.04.09"
+    },
+    {
+      "brand": "泰山企業",
+      "product": "泰山不飽和大豆沙拉油 2.6L*6入(新版)",
+      "batch": "2027040901",
+      "expiry": "2027.04.09"
+    },
+    {
+      "brand": "泰山企業",
+      "product": "泰山精選蔬菜油 3L*6",
+      "batch": "2027072506",
+      "expiry": "2027.07.25"
+    },
+    {
+      "brand": "泰山企業",
+      "product": "泰山好理調合油 2L*6",
+      "batch": "2027072506",
+      "expiry": "2027.07.25"
+    },
+    {
+      "brand": "泰山企業",
+      "product": "泰山大豆沙拉油 0.6L*12入(新版)",
+      "batch": "2027041301",
+      "expiry": "2027.10.09"
+    },
+    {
+      "brand": "泰山企業",
+      "product": "泰山歐式果實精華調合油 1.5L*6入",
+      "batch": "2027101301",
+      "expiry": "2027.04.13"
+    },
+    {
+      "brand": "泰山企業",
+      "product": "泰山好理調合油 0.6L*24",
+      "batch": "2027072504",
+      "expiry": "2027.10.13"
+    },
+    {
+      "brand": "泰山企業",
+      "product": "泰山花生風味調和油 2L*6入",
+      "batch": "2027100901",
+      "expiry": "2027.07.25"
+    }
+  ],
+  "fumao_bulk": [
+    {
+      "company": "聯華食品工業股份有限公司-基隆",
+      "address": "基隆市安樂區內寮里武訓街43號",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604101315",
+      "qty": "6,010"
+    },
+    {
+      "company": "東穎食品實業有限公司",
+      "address": "新北市中和區立德街98巷82號",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604081315",
+      "qty": "11,100"
+    },
+    {
+      "company": "桂冠實業股份有限公司",
+      "address": "新北市中和區連和里中山路二段329號",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604101315",
+      "qty": "22,030"
+    },
+    {
+      "company": "廣達香食品股份有限公司",
+      "address": "新北市新莊區化成路382巷18號",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604091315",
+      "qty": "5,000"
+    },
+    {
+      "company": "大地農產有限公司",
+      "address": "桃園市桃園區鹽務路7號",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604091315",
+      "qty": "4,050"
+    },
+    {
+      "company": "龍膳坊企業有限公司",
+      "address": "桃園市龍潭區工五路62巷21號",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604091315",
+      "qty": "6,000"
+    },
+    {
+      "company": "聯華食品工業股份有限公司-中壢",
+      "address": "桃園縣中壢市北園路16號",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604091315",
+      "qty": "5,060"
+    },
+    {
+      "company": "聯合利華股份有限公司",
+      "address": "新竹縣新豐鄉新和路150號",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604091315",
+      "qty": "16,020"
+    },
+    {
+      "company": "金安信食品有限公司",
+      "address": "臺中市南屯區工業22路17號",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604091315",
+      "qty": "3,390"
+    },
+    {
+      "company": "森御盒膳股份有限公司",
+      "address": "臺中市大甲區日南里工七路10號",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604091315",
+      "qty": "6,990"
+    },
+    {
+      "company": "聯華食品工業股份有限公司-彰化",
+      "address": "彰化縣北斗鎮大新里四海路一段87號",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604091315",
+      "qty": "5,040"
+    },
+    {
+      "company": "禾家香食品股份有限公司",
+      "address": "彰化縣北斗鎮中山路二段527巷118號",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604081315",
+      "qty": "6,010"
+    },
+    {
+      "company": "漢寶增豐牧場",
+      "address": "彰化縣芳苑鄉漢寶村大同路625號",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604101315",
+      "qty": "6,200"
+    },
+    {
+      "company": "華南食品工業(股)公司",
+      "address": "南投市南岡工業區自立一路9號",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604091315",
+      "qty": "9,000"
+    },
+    {
+      "company": "多吉師食品有限公司",
+      "address": "雲林縣二崙鄉大義村田中路23號",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604081315",
+      "qty": "25,020"
+    },
+    {
+      "company": "丞億貿易有限公司",
+      "address": "雲林縣斗南鎮北銘里永安街17號1樓",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604081315",
+      "qty": "33,850"
+    },
+    {
+      "company": "林文政",
+      "address": "雲林縣台西鄉富奇村三和路100號",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604091315",
+      "qty": "6,010"
+    },
+    {
+      "company": "張玉發",
+      "address": "雲林縣西螺鎮茄塘3之3號",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604091315",
+      "qty": "7,010"
+    },
+    {
+      "company": "林鴻隆",
+      "address": "雲林縣西螺鎮埤頭里52號",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604091315",
+      "qty": "5,160"
+    },
+    {
+      "company": "峰妙商行",
+      "address": "雲林縣西螺鎮埤頭里埤頭75之5號",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604091315",
+      "qty": "7,010"
+    },
+    {
+      "company": "誠泰食品有限公司",
+      "address": "雲林縣西螺鎮福田里社口68-56號",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604101315",
+      "qty": "4,900"
+    },
+    {
+      "company": "玉品實業有限公司",
+      "address": "雲林縣崙背鄉崙前村大利街39號1樓",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604081315",
+      "qty": "6,010"
+    },
+    {
+      "company": "南亞塑膠工業股份有限公司",
+      "address": "雲林縣麥寮鄉中興村台塑工業園區1號之1",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604081315",
+      "qty": "52,110"
+    },
+    {
+      "company": "廖振盛",
+      "address": "雲林縣莿桐鄉義和村三和路120號",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604081315",
+      "qty": "5,990"
+    },
+    {
+      "company": "新農科技股份有限公司",
+      "address": "臺南市官田區富強路27號",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604081315",
+      "qty": "24,710"
+    },
+    {
+      "company": "維義事業股份有限公司",
+      "address": "高雄市大社區旗楠路103巷23號",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604081315",
+      "qty": "15,030"
+    },
+    {
+      "company": "崁頂義豐麻油廠",
+      "address": "屏東縣崁頂鄉崁頂村中正路1-2號",
+      "product": "一級黃豆油",
+      "spec": "散",
+      "batch": "202604091315",
+      "qty": "25,010"
+    }
+  ],
+  "fumao_barrel": [
+    {
+      "company": "信興油行",
+      "address": "基隆市仁愛區光華里華三街三一號一樓",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "116"
+    },
+    {
+      "company": "蔡俊彤",
+      "address": "基隆市仁愛區華二街13-1號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "1,601"
+    },
+    {
+      "company": "蔡俊彤",
+      "address": "基隆市仁愛區華二街13-1號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "17"
+    },
+    {
+      "company": "三和行",
+      "address": "基隆市仁愛區精一路24號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "825"
+    },
+    {
+      "company": "康達盛通生活事業股份有限公司",
+      "address": "臺北市中山區樂群三路218號2樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "132"
+    },
+    {
+      "company": "康達盛通生活事業股份有限公司",
+      "address": "臺北市中山區樂群三路218號2樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "693"
+    },
+    {
+      "company": "康達盛通生活事業股份有限公司",
+      "address": "臺北市中山區樂群三路218號2樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "132"
+    },
+    {
+      "company": "康達盛通生活事業股份有限公司",
+      "address": "臺北市中山區樂群三路218號2樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "330"
+    },
+    {
+      "company": "康達盛通生活事業股份有限公司",
+      "address": "臺北市中山區樂群三路218號2樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "644"
+    },
+    {
+      "company": "康達盛通生活事業股份有限公司",
+      "address": "臺北市中山區樂群三路218號2樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "429"
+    },
+    {
+      "company": "康達盛通生活事業股份有限公司",
+      "address": "臺北市中山區樂群三路218號2樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "215"
+    },
+    {
+      "company": "晶華國際酒店股份有限公司",
+      "address": "臺北市中山區中山北路2段39巷3號1至20樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "990"
+    },
+    {
+      "company": "晶華國際酒店股份有限公司",
+      "address": "臺北市中山區中山北路2段39巷3號1至20樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18KG",
+      "batch": "20270413000408",
+      "qty": "108"
+    },
+    {
+      "company": "故宮晶華股份有限公司",
+      "address": "臺北市士林區至善路二段221號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "264"
+    },
+    {
+      "company": "晨皓食品貿易有限公司",
+      "address": "臺北市文山區興隆路三段36巷15弄12號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "825"
+    },
+    {
+      "company": "晨皓食品貿易有限公司",
+      "address": "臺北市文山區興隆路三段36巷15弄12號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "17"
+    },
+    {
+      "company": "德諱興業有限公司",
+      "address": "臺北市中山區合江街180巷3號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "462"
+    },
+    {
+      "company": "德諱興業有限公司",
+      "address": "臺北市中山區合江街180巷3號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "1,188"
+    },
+    {
+      "company": "德諱興業有限公司",
+      "address": "臺北市中山區合江街180巷3號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "33"
+    },
+    {
+      "company": "暉利實業有限公司",
+      "address": "臺北市中正區河堤里同安街99-9號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "1,683"
+    },
+    {
+      "company": "暉利實業有限公司",
+      "address": "臺北市中正區河堤里同安街99-9號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "825"
+    },
+    {
+      "company": "暉利實業有限公司",
+      "address": "臺北市中正區河堤里同安街99-9號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "99"
+    },
+    {
+      "company": "周明青",
+      "address": "臺北市文山區集英街15號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "825"
+    },
+    {
+      "company": "宏麗食品有限公司",
+      "address": "新北市新店區安平路35巷10-2號1樓",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "1,650"
+    },
+    {
+      "company": "宏麗食品有限公司",
+      "address": "新北市新店區安平路35巷10-2號1樓",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "99"
+    },
+    {
+      "company": "路易莎職人咖啡股份有限公司",
+      "address": "新北市五股區五工一路106號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "165"
+    },
+    {
+      "company": "路易莎職人咖啡股份有限公司",
+      "address": "新北市五股區五工一路106號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "132"
+    },
+    {
+      "company": "路易莎職人咖啡股份有限公司",
+      "address": "新北市五股區五工一路106號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "413"
+    },
+    {
+      "company": "路易莎職人咖啡股份有限公司",
+      "address": "新北市五股區五工一路106號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "66"
+    },
+    {
+      "company": "路易莎職人咖啡股份有限公司",
+      "address": "新北市五股區五工一路106號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "99"
+    },
+    {
+      "company": "路易莎職人咖啡股份有限公司",
+      "address": "新北市五股區五工一路106號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "99"
+    },
+    {
+      "company": "路易莎職人咖啡股份有限公司",
+      "address": "新北市五股區五工一路106號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "545"
+    },
+    {
+      "company": "老協珍股份有限公司",
+      "address": "新北市八里區中山路二段66號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "825"
+    },
+    {
+      "company": "泰佶食品行",
+      "address": "新北市三峽區三樹路350號",
+      "product": "益康大豆沙拉油",
+      "spec": "18KG",
+      "batch": "20270413000408",
+      "qty": "900"
+    },
+    {
+      "company": "翟恩思整合行銷有限公司",
+      "address": "新北市三峽區介夀路2段138巷1弄98號-11",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "1,650"
+    },
+    {
+      "company": "宏鑫食品有限公司",
+      "address": "新北市土城區自強街31之1號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "4,950"
+    },
+    {
+      "company": "宏鑫食品有限公司",
+      "address": "新北市土城區自強街31之1號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "99"
+    },
+    {
+      "company": "立倉興業有限公司",
+      "address": "新北市土城區和平路111-10號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "8,250"
+    },
+    {
+      "company": "尚興榮企業社",
+      "address": "新北市中和區福祥路122號1樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "825"
+    },
+    {
+      "company": "尚興榮企業社",
+      "address": "新北市中和區福祥路122號1樓",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "33"
+    },
+    {
+      "company": "明遠雜糧行",
+      "address": "新北市中和區興南路一段125號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "495"
+    },
+    {
+      "company": "明遠雜糧行",
+      "address": "新北市中和區興南路一段125號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "495"
+    },
+    {
+      "company": "明遠雜糧行",
+      "address": "新北市中和區興南路一段125號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "825"
+    },
+    {
+      "company": "明遠雜糧行",
+      "address": "新北市中和區興南路一段125號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "66"
+    },
+    {
+      "company": "豐榆有限公司",
+      "address": "新北市五股區中興路一段1巷17號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "842"
+    },
+    {
+      "company": "豐榆有限公司",
+      "address": "新北市五股區中興路一段1巷17號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "33"
+    },
+    {
+      "company": "豐榆有限公司",
+      "address": "新北市五股區中興路一段1巷17號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "1,139"
+    },
+    {
+      "company": "國豐商行有限公司",
+      "address": "新北市五股區中興路二段11弄25號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "990"
+    },
+    {
+      "company": "國豐商行有限公司",
+      "address": "新北市五股區中興路二段11弄25號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "3,300"
+    },
+    {
+      "company": "國豐商行有限公司",
+      "address": "新北市五股區中興路二段11弄25號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "66"
+    },
+    {
+      "company": "國豐商行有限公司",
+      "address": "新北市五股區中興路二段11弄25號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "66"
+    },
+    {
+      "company": "布列德麵包股份有限公司",
+      "address": "新北市五股區五工六路53之2號2樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "165"
+    },
+    {
+      "company": "健衢生技有限公司",
+      "address": "新北市五股區五權八路39號之1",
+      "product": "益康大豆沙拉油",
+      "spec": "18KG",
+      "batch": "20270413000408",
+      "qty": "900"
+    },
+    {
+      "company": "大王肉脯店",
+      "address": "新北市五股區登林路95-5號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "413"
+    },
+    {
+      "company": "台灣優良農產運銷有限公司",
+      "address": "新北市汐止區中興路236號2樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "660"
+    },
+    {
+      "company": "台灣優良農產運銷有限公司",
+      "address": "新北市汐止區中興路236號2樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "8,250"
+    },
+    {
+      "company": "台灣優良農產運銷有限公司",
+      "address": "新北市汐止區中興路236號2樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "116"
+    },
+    {
+      "company": "台灣優良農產運銷有限公司",
+      "address": "新北市汐止區中興路236號2樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "2,805"
+    },
+    {
+      "company": "台灣優良農產運銷有限公司",
+      "address": "新北市汐止區中興路236號2樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "2,145"
+    },
+    {
+      "company": "台灣優良農產運銷有限公司",
+      "address": "新北市汐止區中興路236號2樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "83"
+    },
+    {
+      "company": "台灣優良農產運銷有限公司",
+      "address": "新北市汐止區中興路236號2樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "83"
+    },
+    {
+      "company": "台灣優良農產運銷有限公司",
+      "address": "新北市汐止區中興路236號2樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "3,630"
+    },
+    {
+      "company": "台灣優良農產運銷有限公司",
+      "address": "新北市汐止區中興路236號2樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "50"
+    },
+    {
+      "company": "台灣優良農產運銷有限公司",
+      "address": "新北市汐止區中興路236號2樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "2,888"
+    },
+    {
+      "company": "台灣優良農產運銷有限公司",
+      "address": "新北市汐止區中興路236號2樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "83"
+    },
+    {
+      "company": "台灣優良農產運銷有限公司",
+      "address": "新北市汐止區中興路236號2樓",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "891"
+    },
+    {
+      "company": "許順福",
+      "address": "新北市汐止區福德一路213巷6號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "165"
+    },
+    {
+      "company": "名陽食品有限公司",
+      "address": "新北市板橋區大觀路一段38巷156弄183號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "1,650"
+    },
+    {
+      "company": "名陽食品有限公司",
+      "address": "新北市板橋區大觀路一段38巷156弄183號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "17"
+    },
+    {
+      "company": "華福食品股份有限公司",
+      "address": "新北市林口區宏昌街8巷1號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "2,475"
+    },
+    {
+      "company": "擘進企業有限公司",
+      "address": "新北市林口區粉寮路2段358-2號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "248"
+    },
+    {
+      "company": "擘進企業有限公司",
+      "address": "新北市林口區粉寮路2段358-2號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "83"
+    },
+    {
+      "company": "擘進企業有限公司",
+      "address": "新北市林口區粉寮路2段358-2號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "33"
+    },
+    {
+      "company": "高聖泰國際企業有限公司",
+      "address": "新北市林口區湖北里後湖路52-11號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "2,970"
+    },
+    {
+      "company": "高聖泰國際企業有限公司",
+      "address": "新北市林口區湖北里後湖路52-11號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "330"
+    },
+    {
+      "company": "齊魯食品有限公司",
+      "address": "新北市泰山區中港西路120巷7號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "5,940"
+    },
+    {
+      "company": "齊魯食品有限公司",
+      "address": "新北市泰山區中港西路120巷7號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "132"
+    },
+    {
+      "company": "樂晴食品有限公司",
+      "address": "新北市新莊區自立街62-66號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "1,650"
+    },
+    {
+      "company": "樂晴食品有限公司",
+      "address": "新北市新莊區自立街62-66號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "33"
+    },
+    {
+      "company": "長福食品有限公司",
+      "address": "新北市新莊區福營路269號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "825"
+    },
+    {
+      "company": "長福食品有限公司",
+      "address": "新北市新莊區福營路269號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "413"
+    },
+    {
+      "company": "長福食品有限公司",
+      "address": "新北市新莊區福營路269號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "17"
+    },
+    {
+      "company": "廣益雜糧行",
+      "address": "新北市樹林區樹新路28巷7號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "1,815"
+    },
+    {
+      "company": "廣益雜糧行",
+      "address": "新北市樹林區樹新路28巷7號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "825"
+    },
+    {
+      "company": "廣益雜糧行",
+      "address": "新北市樹林區樹新路28巷7號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "660"
+    },
+    {
+      "company": "廣益雜糧行",
+      "address": "新北市樹林區樹新路28巷7號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "17"
+    },
+    {
+      "company": "廣益雜糧行",
+      "address": "新北市樹林區樹新路28巷7號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "330"
+    },
+    {
+      "company": "廣益雜糧行",
+      "address": "新北市樹林區樹新路28巷7號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "17"
+    },
+    {
+      "company": "廣益雜糧行",
+      "address": "新北市樹林區樹新路28巷7號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "330"
+    },
+    {
+      "company": "廣益雜糧行",
+      "address": "新北市樹林區樹新路28巷7號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "17"
+    },
+    {
+      "company": "點線麵餐飲(股)公司",
+      "address": "桃園市八德區福德一路237號",
+      "product": "益康大豆沙拉油",
+      "spec": "18KG",
+      "batch": "20270413000408",
+      "qty": "1,476"
+    },
+    {
+      "company": "沅隆食品有限公司",
+      "address": "桃園市大園區民安路130號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "1,650"
+    },
+    {
+      "company": "總舖師食品有限公司",
+      "address": "桃園市大園區拔子林一路93巷1號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "825"
+    },
+    {
+      "company": "遠耀貿易有限公司",
+      "address": "桃園市大園區濱海路三段185巷95號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "6,600"
+    },
+    {
+      "company": "泰康食品企業社",
+      "address": "桃園市大溪區月眉路15鄰71號",
+      "product": "益康大豆沙拉油",
+      "spec": "18KG",
+      "batch": "20270413000408",
+      "qty": "2,556"
+    },
+    {
+      "company": "泰康食品企業社",
+      "address": "桃園市大溪區月眉路15鄰71號",
+      "product": "益康大豆沙拉油",
+      "spec": "18KG",
+      "batch": "20270413000408",
+      "qty": "54"
+    },
+    {
+      "company": "福泰團膳股份有限公司",
+      "address": "桃園市中壢區民權路三段75巷77號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "4,950"
+    },
+    {
+      "company": "野味企業有限公司",
+      "address": "桃園市中壢區新中北路469巷122號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "1,650"
+    },
+    {
+      "company": "勁宏企業社",
+      "address": "桃園市平鎮區南東路271-33號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "825"
+    },
+    {
+      "company": "山珍食品有限公司",
+      "address": "桃園市桃園區中正路314號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "33"
+    },
+    {
+      "company": "緯柏國際貿易有限公司",
+      "address": "桃園市桃園區國際路一段680巷105號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "1,650"
+    },
+    {
+      "company": "緯柏國際貿易有限公司",
+      "address": "桃園市桃園區國際路一段680巷105號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "1,650"
+    },
+    {
+      "company": "緯柏國際貿易有限公司",
+      "address": "桃園市桃園區國際路一段680巷105號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "33"
+    },
+    {
+      "company": "璿民有限公司",
+      "address": "桃園市桃園區龍壽街191號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "1,650"
+    },
+    {
+      "company": "璿民有限公司",
+      "address": "桃園市桃園區龍壽街191號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "50"
+    },
+    {
+      "company": "饒育華",
+      "address": "桃園市楊梅區永美路2號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "495"
+    },
+    {
+      "company": "饒育華",
+      "address": "桃園市楊梅區永美路2號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "33"
+    },
+    {
+      "company": "富煒食品有限公司",
+      "address": "桃園市楊梅區環東路293號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "3,300"
+    },
+    {
+      "company": "富煒食品有限公司",
+      "address": "桃園市楊梅區環東路293號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "33"
+    },
+    {
+      "company": "芳水有限公司",
+      "address": "桃園市龍潭區干城路122號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "825"
+    },
+    {
+      "company": "芳水有限公司",
+      "address": "桃園市龍潭區干城路122號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "165"
+    },
+    {
+      "company": "芳水有限公司",
+      "address": "桃園市龍潭區干城路122號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "17"
+    },
+    {
+      "company": "建晟食品有限公司",
+      "address": "桃園市蘆竹區五福一路92巷8號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "17"
+    },
+    {
+      "company": "鼎生食品有限公司",
+      "address": "新竹市北區榮濱路65號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "792"
+    },
+    {
+      "company": "鼎生食品有限公司",
+      "address": "新竹市北區榮濱路65號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "1,188"
+    },
+    {
+      "company": "鼎生食品有限公司",
+      "address": "新竹市北區榮濱路65號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "1,650"
+    },
+    {
+      "company": "鼎生食品有限公司",
+      "address": "新竹市北區榮濱路65號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "990"
+    },
+    {
+      "company": "豐炘商行",
+      "address": "新竹市東大路3段20之1號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "4,950"
+    },
+    {
+      "company": "豐炘商行",
+      "address": "新竹市東大路3段20之1號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "99"
+    },
+    {
+      "company": "御品國際餐飲股份有限公司",
+      "address": "新竹市香山區牛埔南路540號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "825"
+    },
+    {
+      "company": "春上股份有限公司",
+      "address": "新竹縣竹北市文興路一段338號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "1,320"
+    },
+    {
+      "company": "大買家股份有限公司大里國光分公司",
+      "address": "臺中市大里區國光路2段710號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "165"
+    },
+    {
+      "company": "寶喆食品有限公司",
+      "address": "臺中市太平區新光里新福路1112巷16號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "1,980"
+    },
+    {
+      "company": "寶喆食品有限公司",
+      "address": "臺中市太平區新光里新福路1112巷16號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "182"
+    },
+    {
+      "company": "溢鼎鱻海鮮館漁港店",
+      "address": "臺中市清水區海濱里北堤路30號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "66"
+    },
+    {
+      "company": "美食家食材通路股份有限公司",
+      "address": "臺中市烏日區學田路251號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "3,548"
+    },
+    {
+      "company": "美食家食材通路股份有限公司",
+      "address": "臺中市烏日區學田路251號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "1,403"
+    },
+    {
+      "company": "美食家食材通路股份有限公司",
+      "address": "臺中市烏日區學田路251號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "4,868"
+    },
+    {
+      "company": "美食家食材通路股份有限公司",
+      "address": "臺中市烏日區學田路251號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "3,053"
+    },
+    {
+      "company": "美食家食材通路股份有限公司",
+      "address": "臺中市烏日區學田路251號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "2,970"
+    },
+    {
+      "company": "美食家食材通路股份有限公司",
+      "address": "臺中市烏日區學田路251號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "990"
+    },
+    {
+      "company": "永順豐商行",
+      "address": "臺中市大甲區信義路44號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "825"
+    },
+    {
+      "company": "永順豐商行",
+      "address": "臺中市大甲區信義路44號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "363"
+    },
+    {
+      "company": "永順豐商行",
+      "address": "臺中市大甲區信義路44號",
+      "product": "益康大豆沙拉油",
+      "spec": "18KG",
+      "batch": "20270413000408",
+      "qty": "1,080"
+    },
+    {
+      "company": "永順豐商行",
+      "address": "臺中市大甲區信義路44號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "17"
+    },
+    {
+      "company": "永順豐商行",
+      "address": "臺中市大甲區信義路44號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "17"
+    },
+    {
+      "company": "張閔棟",
+      "address": "臺中市大甲區義和里文曲路598巷5號",
+      "product": "益康大豆沙拉油",
+      "spec": "18KG",
+      "batch": "20270413000408",
+      "qty": "972"
+    },
+    {
+      "company": "富達食品有限公司",
+      "address": "臺中市大肚區王田里沙田路1段251號",
+      "product": "益康大豆沙拉油",
+      "spec": "18KG",
+      "batch": "20270413000408",
+      "qty": "1,800"
+    },
+    {
+      "company": "富達食品有限公司",
+      "address": "臺中市大肚區王田里沙田路1段251號",
+      "product": "益康大豆沙拉油",
+      "spec": "18KG",
+      "batch": "20270413000408",
+      "qty": "18"
+    },
+    {
+      "company": "味源股份有限公司",
+      "address": "臺中市大里區國中路483巷3號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "2,640"
+    },
+    {
+      "company": "長鑫商行",
+      "address": "臺中市大雅區三和里仁和路79號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "2,970"
+    },
+    {
+      "company": "長鑫商行",
+      "address": "臺中市大雅區三和里仁和路79號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "6,930"
+    },
+    {
+      "company": "長鑫商行",
+      "address": "臺中市大雅區三和里仁和路79號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "1,980"
+    },
+    {
+      "company": "長鑫商行",
+      "address": "臺中市大雅區三和里仁和路79號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "99"
+    },
+    {
+      "company": "侑嘉詮企業有限公司",
+      "address": "臺中市大雅區雅秀路137號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "83"
+    },
+    {
+      "company": "頂裕食品股份有限公司",
+      "address": "臺中市工業區23路24號",
+      "product": "益康大豆沙拉油",
+      "spec": "18KG",
+      "batch": "20270413000408",
+      "qty": "1,080"
+    },
+    {
+      "company": "連興油行",
+      "address": "臺中市西屯區何仁里長安路1段45號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "4,125"
+    },
+    {
+      "company": "連興油行",
+      "address": "臺中市西屯區何仁里長安路1段45號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "825"
+    },
+    {
+      "company": "連興油行",
+      "address": "臺中市西屯區何仁里長安路1段45號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "446"
+    },
+    {
+      "company": "連興油行",
+      "address": "臺中市西屯區何仁里長安路1段45號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "578"
+    },
+    {
+      "company": "旭安國際有限公司",
+      "address": "臺中市西屯區環中路1段2088-7號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "2,475"
+    },
+    {
+      "company": "旭安國際有限公司",
+      "address": "臺中市西屯區環中路1段2088-7號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "66"
+    },
+    {
+      "company": "豪運商行",
+      "address": "臺中市沙鹿區竹林里福田北街442號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "8,910"
+    },
+    {
+      "company": "陳舜原",
+      "address": "臺中市沙鹿區鎮南路二段18號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "83"
+    },
+    {
+      "company": "陳舜原",
+      "address": "臺中市沙鹿區鎮南路二段18號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "1,320"
+    },
+    {
+      "company": "陳舜原",
+      "address": "臺中市沙鹿區鎮南路二段18號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "33"
+    },
+    {
+      "company": "竹記有限公司",
+      "address": "臺中市東區大公街43號2樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "3,960"
+    },
+    {
+      "company": "竹記有限公司",
+      "address": "臺中市東區大公街43號2樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "99"
+    },
+    {
+      "company": "杰釩有限公司",
+      "address": "臺中市東區自由路四段396號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "2,475"
+    },
+    {
+      "company": "杰釩有限公司",
+      "address": "臺中市東區自由路四段396號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "1,650"
+    },
+    {
+      "company": "杰釩有限公司",
+      "address": "臺中市東區自由路四段396號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "33"
+    },
+    {
+      "company": "杰釩有限公司",
+      "address": "臺中市東區自由路四段396號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "825"
+    },
+    {
+      "company": "金食在食材有限公司",
+      "address": "臺中市烏日區溪南路一段680巷526弄36號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "2,970"
+    },
+    {
+      "company": "金食在食材有限公司",
+      "address": "臺中市烏日區溪南路一段680巷526弄36號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "66"
+    },
+    {
+      "company": "金食在食材有限公司",
+      "address": "臺中市烏日區溪南路一段680巷526弄36號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "99"
+    },
+    {
+      "company": "金食在食材有限公司",
+      "address": "臺中市烏日區溪南路一段680巷526弄36號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "99"
+    },
+    {
+      "company": "金食在食材有限公司",
+      "address": "臺中市烏日區溪南路一段680巷526弄36號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "33"
+    },
+    {
+      "company": "金食在食材有限公司",
+      "address": "臺中市烏日區溪南路一段680巷526弄36號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "132"
+    },
+    {
+      "company": "品欣食品商行",
+      "address": "臺中市神岡區中山路228號1樓",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "1,320"
+    },
+    {
+      "company": "品欣食品商行",
+      "address": "臺中市神岡區中山路228號1樓",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "50"
+    },
+    {
+      "company": "廖昭財",
+      "address": "臺中市清水區中山路414-1號",
+      "product": "益康大豆沙拉油",
+      "spec": "18KG",
+      "batch": "20270413000408",
+      "qty": "720"
+    },
+    {
+      "company": "明昱商行",
+      "address": "臺中市潭子區福林路三段66-7號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "825"
+    },
+    {
+      "company": "明昱商行",
+      "address": "臺中市潭子區福林路三段66-7號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "17"
+    },
+    {
+      "company": "明昱商行",
+      "address": "臺中市潭子區福林路三段66-7號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "17"
+    },
+    {
+      "company": "巨盛洋行",
+      "address": "倉庫地址：臺中市太平區永豐路109巷14號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "1,650"
+    },
+    {
+      "company": "巨盛洋行",
+      "address": "倉庫地址：臺中市太平區永豐路109巷14號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "33"
+    },
+    {
+      "company": "佳順免洗餐具商行",
+      "address": "彰化縣員林市新生里莒光路384號1樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "446"
+    },
+    {
+      "company": "佳順免洗餐具商行",
+      "address": "彰化縣員林市新生里莒光路384號1樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "1,205"
+    },
+    {
+      "company": "巧福實業股份有限公司",
+      "address": "彰化縣北斗鎮中寮里光前路9-6號",
+      "product": "益康大豆沙拉油",
+      "spec": "18KG",
+      "batch": "20270413000408",
+      "qty": "1,800"
+    },
+    {
+      "company": "巧福實業股份有限公司",
+      "address": "彰化縣北斗鎮中寮里光前路9-6號",
+      "product": "益康大豆沙拉油",
+      "spec": "18KG",
+      "batch": "20270413000408",
+      "qty": "18"
+    },
+    {
+      "company": "潔香行",
+      "address": "彰化縣秀水鄉安東村中山路116號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "50"
+    },
+    {
+      "company": "福順發商行",
+      "address": "彰化縣秀水鄉金陵村安南巷118號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "5,775"
+    },
+    {
+      "company": "福順發商行",
+      "address": "彰化縣秀水鄉金陵村安南巷118號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "149"
+    },
+    {
+      "company": "智安商行",
+      "address": "彰化縣秀水鄉溪心街368-1號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "1,650"
+    },
+    {
+      "company": "和誠實業有限公司",
+      "address": "彰化縣溪洲鄉瓦厝村中山路三段275號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "99"
+    },
+    {
+      "company": "和誠實業有限公司",
+      "address": "彰化縣溪洲鄉瓦厝村中山路三段275號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "17"
+    },
+    {
+      "company": "上發行",
+      "address": "彰化縣彰化市國聖路175巷121弄150號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "1,650"
+    },
+    {
+      "company": "上發行",
+      "address": "彰化縣彰化市國聖路175巷121弄150號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "33"
+    },
+    {
+      "company": "大之禹總匯商行林森營業所",
+      "address": "彰化縣彰化市線東路一段139號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "1,650"
+    },
+    {
+      "company": "大之禹總匯商行林森營業所",
+      "address": "彰化縣彰化市線東路一段139號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "33"
+    },
+    {
+      "company": "黃馨以",
+      "address": "彰化市秀水鄉彰秀路36巷32號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "4,950"
+    },
+    {
+      "company": "黃馨以",
+      "address": "彰化市秀水鄉彰秀路36巷32號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "99"
+    },
+    {
+      "company": "台灣卜蜂企業股份有限公司南投肉品加工廠",
+      "address": "南投縣南投市工業東路17號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "990"
+    },
+    {
+      "company": "台灣卜蜂企業股份有限公司南投肉品加工廠",
+      "address": "南投縣南投市工業東路17號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "3,960"
+    },
+    {
+      "company": "都源國際有限公司",
+      "address": "南投縣埔里鎮九成街48號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "825"
+    },
+    {
+      "company": "都源國際有限公司",
+      "address": "南投縣埔里鎮九成街48號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "17"
+    },
+    {
+      "company": "都源國際有限公司",
+      "address": "南投縣埔里鎮九成街48號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "83"
+    },
+    {
+      "company": "祥鼎食品有限公司",
+      "address": "南投縣草屯鎮加老里芬草路三段68號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "1,155"
+    },
+    {
+      "company": "祥鼎食品有限公司",
+      "address": "南投縣草屯鎮加老里芬草路三段68號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "495"
+    },
+    {
+      "company": "樺頻商行",
+      "address": "雲林縣土庫鎮新庄里257-5號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "314"
+    },
+    {
+      "company": "味王股份有限公司",
+      "address": "雲林縣大埤鄉豐田路14號",
+      "product": "益康大豆沙拉油",
+      "spec": "18KG",
+      "batch": "20270413000408",
+      "qty": "2,160"
+    },
+    {
+      "company": "久代商行",
+      "address": "雲林縣莿桐鄉義和村三和39之11號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "165"
+    },
+    {
+      "company": "竑鑫食品有限公司",
+      "address": "嘉義縣中埔鄉富收村富和路40號",
+      "product": "益康大豆沙拉油",
+      "spec": "18KG",
+      "batch": "20270413000408",
+      "qty": "5,400"
+    },
+    {
+      "company": "謝宗佑",
+      "address": "嘉義縣中埔鄉隆興村汴頭8-3號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "495"
+    },
+    {
+      "company": "謝宗佑",
+      "address": "嘉義縣中埔鄉隆興村汴頭8-3號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "33"
+    },
+    {
+      "company": "得新商行",
+      "address": "臺南市永康區大灣路187號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "1,650"
+    },
+    {
+      "company": "宏原行",
+      "address": "臺南市新市區大營里313號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "1,221"
+    },
+    {
+      "company": "宏原行",
+      "address": "臺南市新市區大營里313號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "429"
+    },
+    {
+      "company": "宏原行",
+      "address": "臺南市新市區大營里313號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "17"
+    },
+    {
+      "company": "晟隆貿易企業社",
+      "address": "臺南市麻豆區文學路46號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "5,940"
+    },
+    {
+      "company": "晟隆貿易企業社",
+      "address": "臺南市麻豆區文學路46號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "990"
+    },
+    {
+      "company": "晟隆貿易企業社",
+      "address": "臺南市麻豆區文學路46號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "1,980"
+    },
+    {
+      "company": "晟隆貿易企業社",
+      "address": "臺南市麻豆區文學路46號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "1,980"
+    },
+    {
+      "company": "晟隆貿易企業社",
+      "address": "臺南市麻豆區文學路46號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "1,980"
+    },
+    {
+      "company": "晟隆貿易企業社",
+      "address": "臺南市麻豆區文學路46號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "990"
+    },
+    {
+      "company": "晟隆貿易企業社",
+      "address": "臺南市麻豆區文學路46號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "83"
+    },
+    {
+      "company": "晟隆貿易企業社",
+      "address": "臺南市麻豆區文學路46號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "1,898"
+    },
+    {
+      "company": "晟隆貿易企業社",
+      "address": "臺南市麻豆區文學路46號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "990"
+    },
+    {
+      "company": "晟隆貿易企業社",
+      "address": "臺南市麻豆區文學路46號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "990"
+    },
+    {
+      "company": "晟隆貿易企業社",
+      "address": "臺南市麻豆區文學路46號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "363"
+    },
+    {
+      "company": "爭鮮股份有限公司",
+      "address": "高雄市岡山區協榮路19號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "1,980"
+    },
+    {
+      "company": "福桂有限公司",
+      "address": "高雄市大寮區華五街63號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "4,950"
+    },
+    {
+      "company": "福桂有限公司",
+      "address": "高雄市大寮區華五街63號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "99"
+    },
+    {
+      "company": "台灣有明食品股份有限公司",
+      "address": "屏東縣長治鄉德和村神農路18號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "1,485"
+    },
+    {
+      "company": "立鼎食品行",
+      "address": "宜蘭市中山路五段330號1樓",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "1,469"
+    },
+    {
+      "company": "立鼎食品行",
+      "address": "宜蘭市中山路五段330號1樓",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "33"
+    },
+    {
+      "company": "翔發商行",
+      "address": "宜蘭市宜興路三段132號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "1,650"
+    },
+    {
+      "company": "翔發商行",
+      "address": "宜蘭市宜興路三段132號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "33"
+    },
+    {
+      "company": "誠毅商行",
+      "address": "宜蘭縣宜蘭市建軍里泰山路211巷15號一樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "2,624"
+    },
+    {
+      "company": "誠毅商行",
+      "address": "宜蘭縣宜蘭市建軍里泰山路211巷15號一樓",
+      "product": "益康大豆沙拉油",
+      "spec": "18KG",
+      "batch": "20270413000408",
+      "qty": "7,200"
+    },
+    {
+      "company": "惠眾食品工業股份有限公司",
+      "address": "宜蘭縣蘇澳鎮信義路270巷12弄6號",
+      "product": "益康大豆沙拉油",
+      "spec": "18KG",
+      "batch": "20270413000408",
+      "qty": "2,124"
+    },
+    {
+      "company": "惠眾食品工業股份有限公司",
+      "address": "宜蘭縣蘇澳鎮信義路270巷12弄6號",
+      "product": "益康大豆沙拉油",
+      "spec": "18KG",
+      "batch": "20270413000408",
+      "qty": "144"
+    },
+    {
+      "company": "隆盛食品冷凍股份有限公司",
+      "address": "宜蘭縣蘇澳鎮德興六路11號",
+      "product": "益康大豆沙拉油",
+      "spec": "18KG",
+      "batch": "20270413000408",
+      "qty": "2,970"
+    },
+    {
+      "company": "隆盛食品冷凍股份有限公司",
+      "address": "宜蘭縣蘇澳鎮德興六路11號",
+      "product": "益康大豆沙拉油",
+      "spec": "18KG",
+      "batch": "20270413000408",
+      "qty": "3,204"
+    },
+    {
+      "company": "相正企業有限公司",
+      "address": "花蓮縣吉安鄉北昌村和平路1段138號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "3,300"
+    },
+    {
+      "company": "相正企業有限公司",
+      "address": "花蓮縣吉安鄉北昌村和平路1段138號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "198"
+    },
+    {
+      "company": "相正企業有限公司",
+      "address": "花蓮縣吉安鄉北昌村和平路1段138號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270414000403",
+      "qty": "132"
+    },
+    {
+      "company": "豐益商行",
+      "address": "金門縣金城鎮西門里民權路88號",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "17"
+    },
+    {
+      "company": "零售-謝婉齡",
+      "address": "苗栗縣竹南鎮南大路204號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "413"
+    },
+    {
+      "company": "零售-陳建同",
+      "address": "",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "825"
+    },
+    {
+      "company": "零售-民旭工業股份有限公司",
+      "address": "高雄市大寮區鳳屏二路38號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "17"
+    },
+    {
+      "company": "零售-民旭工業股份有限公司",
+      "address": "高雄市大寮區鳳屏二路38號",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "50"
+    },
+    {
+      "company": "大肚社腳社區發展協會",
+      "address": "",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270411000408",
+      "qty": "50"
+    },
+    {
+      "company": "弗傳慈心社會福利",
+      "address": "",
+      "product": "益康大豆沙拉油",
+      "spec": "18L",
+      "batch": "20270410000407",
+      "qty": "50"
+    },
+    {
+      "company": "揚秦",
+      "address": "",
+      "product": "益康烹調油(調合油)",
+      "spec": "18L",
+      "batch": "20270413000403",
+      "qty": "33"
+    }
+  ],
+  "fushou_list": [
+    {
+      "company": "佑錡國際有限公司",
+      "address": "基隆市暖暖區興隆街10之1號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426P",
+      "qty": "1,771.9",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "佑錡國際有限公司",
+      "address": "基隆市暖暖區興隆街10之1號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "761.8",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "佑錡國際有限公司",
+      "address": "基隆市暖暖區興隆街10之1號1樓",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1140426K",
+      "qty": "2,484.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "吉豐雜糧行",
+      "address": "新北市中和區建八路142號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "563.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "吉豐雜糧行",
+      "address": "新北市中和區建八路142號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL150426L",
+      "qty": "331",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "吉豐雜糧行",
+      "address": "新北市中和區建八路142號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "1,987",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "吉豐雜糧行",
+      "address": "新北市中和區建八路142號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "1,324.80",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "安食達食材通路股份有限公司",
+      "address": "新北市新莊區化成路585號之3",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "1,788.5",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "安食達食材通路股份有限公司",
+      "address": "新北市新莊區化成路585號之3",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "10,035.4",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "安食達食材通路股份有限公司",
+      "address": "新北市新莊區化成路585號之3",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1140426K",
+      "qty": "828.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "松和食品有限公司",
+      "address": "新北市板橋區大觀路三段36巷9之3號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "828.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "榮樺有限公司",
+      "address": "新北市土城區亞洲路58巷5弄26號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "877.7",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "榮樺有限公司",
+      "address": "新北市土城區亞洲路58巷5弄26號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "1,656.00",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "津鼎有限公司",
+      "address": "新北市三重區新北大道二段45號4樓",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "828.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "津鼎有限公司",
+      "address": "新北市三重區新北大道二段45號4樓",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL150426L",
+      "qty": "1,772",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "立泰食品行",
+      "address": "新北市三重區光復路一段61巷24弄16號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "115.9",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "美食家食材通路（股）公司-新北",
+      "address": "新北市五股區成泰路二段185號之2",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "1,175.8",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "美食家食材通路（股）公司-新北",
+      "address": "新北市五股區成泰路二段185號之2",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426P",
+      "qty": "496.8",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "美食家食材通路（股）公司-新北",
+      "address": "新北市五股區成泰路二段185號之2",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "1,987",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "豐得國際實業有限公司",
+      "address": "新北市五股區五權路48號5樓",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "66.2",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "豐榆有限公司",
+      "address": "新北市五股區興珍里中興路１段１巷１7號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "165.6",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "長福食品有限公司",
+      "address": "新北市新莊區福營路269號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "414.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "高聖泰國際企業有限公司",
+      "address": "新北市林口區湖北里後湖５２之３號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "794.9",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "高聖泰國際企業有限公司",
+      "address": "新北市林口區湖北里後湖５２之３號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "4,968",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "大永行銷有限公司",
+      "address": "新北市汐止區福德二路288號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426P",
+      "qty": "1,987.2",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "天成糧行",
+      "address": "新北市泰山區新北大道四段196-20號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "3,477.6",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "巧紳有限公司",
+      "address": "新北市中和區景平路632號2樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "1,656.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "巧紳有限公司",
+      "address": "新北市中和區景平路632號2樓",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1140426K",
+      "qty": "298.1",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "康紀食品有限公司",
+      "address": "新北市新店區建國路237號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "5,017.7",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "振農食品有限公司",
+      "address": "新北市蘆竹區復興路323巷23號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426P",
+      "qty": "1,672.6",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "明光食品有限公司",
+      "address": "新北市中和區景平路634-9號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426P",
+      "qty": "496.8",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "明光食品有限公司",
+      "address": "新北市中和區景平路634-9號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "1,325",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "明光食品有限公司",
+      "address": "新北市中和區景平路634-9號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "4,471",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "明光食品有限公司",
+      "address": "新北市中和區景平路634-9號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "166",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "睿頡雜糧行",
+      "address": "新北市樹林區田尾街232號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "5,017.7",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "睿頡雜糧行",
+      "address": "新北市樹林區田尾街232號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "1,656",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "農昌商行",
+      "address": "新北市板橋區懷德街233巷17號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426P",
+      "qty": "6,359.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "農昌商行",
+      "address": "新北市板橋區懷德街233巷17號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "15,417.4",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "農昌商行",
+      "address": "新北市板橋區懷德街233巷17號1樓",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1140426K",
+      "qty": "496.8",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "農昌商行",
+      "address": "新北市板橋區懷德街233巷17號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426P",
+      "qty": "9,936",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "農昌商行",
+      "address": "新北市板橋區懷德街233巷17號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "4,140",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "農昌商行",
+      "address": "新北市板橋區懷德街233巷17號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "4,223",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "農昌商行",
+      "address": "新北市板橋區懷德街233巷17號1樓",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "248",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "農昌商行",
+      "address": "新北市板橋區懷德街233巷17號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "10,797.12",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "金色三麥餐飲股份有限公司",
+      "address": "新北市三重區光復路一段101號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426P",
+      "qty": "165.6",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "金色三麥餐飲股份有限公司",
+      "address": "新北市三重區光復路一段101號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "99.36",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "鼎旭發有限公司",
+      "address": "新北市永和區國中路150號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426P",
+      "qty": "1,656.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "鼎旭發有限公司",
+      "address": "新北市永和區國中路150號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "17",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "元太興有限公司",
+      "address": "新北市永和區保平路50巷8弄6號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1140426K",
+      "qty": "447.1",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "元太興有限公司",
+      "address": "新北市永和區保平路50巷8弄6號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "1,656",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "菖駿企業社",
+      "address": "新北市三重區三張街111之1號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1140426K",
+      "qty": "496.8",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "菖駿企業社",
+      "address": "新北市三重區三張街111之1號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "8,015",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "敬洋股份有限公司",
+      "address": "新北市新店區民權路95號10樓",
+      "product": "青果多酚精華調合油2L*6入/箱(外)",
+      "batch": "BL140426A",
+      "qty": "72,201.6",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "享記食品有限公司",
+      "address": "新北市汐止區大同路三段369巷25號",
+      "product": "一級黃豆油",
+      "batch": "315-1150404",
+      "qty": "5,010.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "貴族世家企業股份有限公司",
+      "address": "新北市土城區中興路17號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "1,987",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "利倉米店",
+      "address": "新北市土城區興城路55號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "1,656",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "帛盈貿易有限公司",
+      "address": "新北市中和區連城路345號3樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "828",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "五股-直購客人",
+      "address": "新北市五股區五工路145號4樓",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL150426L",
+      "qty": "33",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "家品商行",
+      "address": "新北市板橋區中正路325巷3弄8號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "3,312",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "山海全企業有限公司",
+      "address": "新北市板橋區民治街８１巷３號（１樓）",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL150426L",
+      "qty": "1,275",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "楊維仁",
+      "address": "新北市板橋區褔德街15號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "1,656",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "安穀食品行",
+      "address": "新北市林口區南勢四街71-1號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "1,656",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "尚倢食品有限公司",
+      "address": "新北市新店區安興路45巷2號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "1,656",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "鴻記燒臘便當快餐店",
+      "address": "新北市新莊區自由街２８號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "83",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "禾禾園國際貿易有限公司",
+      "address": "新北市樹林區柑園街一段192號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "6,690",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "禾禾園國際貿易有限公司",
+      "address": "新北市樹林區柑園街一段192號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "546.48",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "建秤企業有限公司",
+      "address": "新北市中和區中山路三段120號之24",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "1,656.00",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "富暘食品有限公司",
+      "address": "臺北市大同區迪化街二段191巷8號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "877.7",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "新祥紀食品有限公司",
+      "address": "臺北市士林區延平北路八段2巷151弄41號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "16.6",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "新祥紀食品有限公司",
+      "address": "臺北市士林區延平北路八段2巷151弄41號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "1,027",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "新祥紀食品有限公司",
+      "address": "臺北市士林區延平北路八段2巷151弄41號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "331",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "國防部福利事業管理處",
+      "address": "臺北市中正區信義路一段3號6樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "629.3",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "裕興食品有限公司",
+      "address": "臺北市萬華區武成街63巷7號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "579.6",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "裕興食品有限公司",
+      "address": "臺北市萬華區武成街63巷7號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1140426K",
+      "qty": "165.6",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "南僑油脂事業股份有限公司",
+      "address": "臺北市中山區建國北路一段21號5樓",
+      "product": "一級黃豆油",
+      "batch": "315-1150404",
+      "qty": "10,000.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "勤穩貿易有限公司",
+      "address": "臺北市士林區延平北路八段2巷151弄41號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "50",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "李坤憲",
+      "address": "臺北市中正區汀州路1段136號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "1,673",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "聯友食品免洗有限公司",
+      "address": "臺北市內湖區安康路246號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "861",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "聯友食品免洗有限公司",
+      "address": "臺北市內湖區安康路246號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "2,451",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "邢瑋玲",
+      "address": "臺北市內湖區安康路246號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "3,312",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "雅培米堤食品有限公司",
+      "address": "臺北市中山區中庄里民生東路２段９７號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "828.00",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "耘群有限公司",
+      "address": "臺北市北投區承德路7段401巷620弄2號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "1,026.72",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "宏潤食品有限公司",
+      "address": "臺北市中山區龍江路412巷53號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "529.92",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "旭昇雜糧行",
+      "address": "臺北市萬華區富民里康定路２３８號１樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "828.00",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "均廣定有限公司",
+      "address": "桃園市龍潭區大昌路二段81號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "877.7",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "崧泉有限公司",
+      "address": "桃園市桃園區國際路二段561巷31之2號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "877.7",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "建樹企業有限公司",
+      "address": "桃園市龍潭區工五路191巷12號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "745.2",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "建樹企業有限公司",
+      "address": "桃園市龍潭區工五路191巷12號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL150426L",
+      "qty": "1,838",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "建樹企業有限公司",
+      "address": "桃園市龍潭區工五路191巷12號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "2,981",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "建晟食品有限公司",
+      "address": "桃園市蘆竹區五福ㄧ路92巷8號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "4,968.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "景輝商行",
+      "address": "桃園市桃園區北興街104號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "1,656.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "沅隆食品有限公司",
+      "address": "桃園市大園區民安路130號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426P",
+      "qty": "1,672.6",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "沅隆食品有限公司",
+      "address": "桃園市大園區民安路130號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "1,524",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "明星商行",
+      "address": "桃園市桃園區民生路582號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "497",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "參發商行",
+      "address": "桃園市桃園區民生路622號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "3,345",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "竹琦食品股份有限公司",
+      "address": "新竹縣竹北市溪州路246巷28號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426P",
+      "qty": "3,593.5",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "竹琦食品股份有限公司",
+      "address": "新竹縣竹北市溪州路246巷28號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1140426K",
+      "qty": "496.8",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "竹琦食品股份有限公司",
+      "address": "新竹縣竹北市溪州路246巷28號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426P",
+      "qty": "3,594",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "竹琦食品股份有限公司",
+      "address": "新竹縣竹北市溪州路246巷28號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "2,368",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "鑫邑商行",
+      "address": "新竹縣湖口鄉八德路一段232-1號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426P",
+      "qty": "3,345.1",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "鑫邑商行",
+      "address": "新竹縣湖口鄉八德路一段232-1號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426P",
+      "qty": "3,345",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "鑫邑商行",
+      "address": "新竹縣湖口鄉八德路一段232-1號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "3,312.00",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "吉美物流有限公司",
+      "address": "新竹縣湖口鄉達生路102號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "3,345.1",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "吉美物流有限公司",
+      "address": "新竹縣湖口鄉達生路102號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1140426K",
+      "qty": "1,159.2",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "吉順行",
+      "address": "新竹市香山區牛埔東路195號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "3,792.24",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "吉順行",
+      "address": "新竹市香山區牛埔東路195號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426P",
+      "qty": "8,362.8",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "龍江興南北商行",
+      "address": "新竹市東區民主路186號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "4,140.00",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "龍江興南北商行",
+      "address": "新竹市東區民主路186號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "5,017.7",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "典佑食品股份有限公司",
+      "address": "新竹市東區千甲路191號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426P",
+      "qty": "3,345",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "典佑食品股份有限公司",
+      "address": "新竹市東區千甲路191號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1140426K",
+      "qty": "115.9",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "典佑食品股份有限公司",
+      "address": "新竹市東區千甲路191號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426P",
+      "qty": "3,345.1",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "旺旺來金山商行",
+      "address": "新竹市東區關東里光復路一段154號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "1,656",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "元昇食品有限公司",
+      "address": "新竹市香山區大庄里西濱路3段250號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "5,299",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "大富食品行",
+      "address": "新竹市東區原興路245號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "5,017.7",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "大富食品行",
+      "address": "新竹市東區原興路245號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1140426K",
+      "qty": "496.8",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "文發商行",
+      "address": "新竹市香山區中華路四段181巷11號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "2,914.6",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "文發商行",
+      "address": "新竹市香山區中華路四段181巷11號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426P",
+      "qty": "2,103.1",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "詮紘食品有限公司",
+      "address": "苗栗縣苑裡鎮3鄰29-8號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "248",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "名揚商行",
+      "address": "苗栗縣頭份市和平里東興路37號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "8,280",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "名揚商行",
+      "address": "苗栗縣頭份市和平里東興路37號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "745",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "合泰食品南北雜貨行",
+      "address": "苗栗縣頭份市仁愛里東興路32號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "8,280.00",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "和岱有限公司",
+      "address": "臺中市南區建國南路一段192號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "828.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "和岱有限公司",
+      "address": "臺中市南區建國南路一段192號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL150426L",
+      "qty": "50",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "怡饗美食股份有限公司",
+      "address": "臺中市西屯區工業區十路11-1號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "115.9",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "津華食品有限公司",
+      "address": "臺中市大里區國中路535號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "496.8",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "福壽實業股份有限公司",
+      "address": "臺中市沙鹿區沙田路45號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "16.6",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "福壽實業股份有限公司",
+      "address": "臺中市沙鹿區沙田路45號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "397.4",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "福壽實業股份有限公司",
+      "address": "臺中市沙鹿區沙田路45號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "149",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "福壽實業股份有限公司",
+      "address": "臺中市沙鹿區沙田路45號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1140426K",
+      "qty": "16,560.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "美食家食材通路（股）公司-臺中",
+      "address": "臺中市烏日區學田路251號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "828.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "美食家食材通路（股）公司-臺中",
+      "address": "臺中市烏日區學田路251號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426P",
+      "qty": "3,974.4",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "美食家食材通路（股）公司-臺中",
+      "address": "臺中市烏日區學田路251號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426P",
+      "qty": "3,974.4",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "美食家食材通路（股）公司-臺中",
+      "address": "臺中市烏日區學田路251號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426P",
+      "qty": "3,974",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "群用企業有限公司",
+      "address": "臺中市沙鹿區興安里大同街18之4號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "1,788.5",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "群用企業有限公司",
+      "address": "臺中市沙鹿區興安里大同街18之4號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "828",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "群用企業有限公司",
+      "address": "臺中市沙鹿區興安里大同街18之4號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "1,656.00",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "新生活興業有限公司",
+      "address": "臺中市沙鹿區南勢里南斗路12巷29號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426P",
+      "qty": "4,968.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "永逸富有限公司",
+      "address": "臺中市梧棲區永寧里中央路一段238之13號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426P",
+      "qty": "993.6",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "永逸富有限公司",
+      "address": "臺中市梧棲區永寧里中央路一段238之13號1樓",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1140426K",
+      "qty": "215.3",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "福大興行",
+      "address": "臺中市沙鹿區新生街33號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426P",
+      "qty": "2,484.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "福大興行",
+      "address": "臺中市沙鹿區新生街33號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1140426K",
+      "qty": "993.6",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "福大興行",
+      "address": "臺中市沙鹿區新生街33號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426P",
+      "qty": "2,484",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "竹記有限公司",
+      "address": "臺中市東區新庄里大公街43號2樓",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "877.7",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "竹記有限公司",
+      "address": "臺中市東區新庄里大公街43號2樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "3,974.4",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "竹記有限公司",
+      "address": "臺中市東區新庄里大公街43號2樓",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1140426K",
+      "qty": "828.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "竹記有限公司",
+      "address": "臺中市東區新庄里大公街43號2樓",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL150426L",
+      "qty": "878",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "竹記有限公司",
+      "address": "臺中市東區新庄里大公街43號2樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "1,673",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "竹記有限公司",
+      "address": "臺中市東區新庄里大公街43號2樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "2,566.80",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "豪運商行",
+      "address": "臺中市沙鹿區竹林里褔田北街442號1樓",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1140426K",
+      "qty": "1,490.4",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "豪運商行",
+      "address": "臺中市沙鹿區竹林里褔田北街442號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426P",
+      "qty": "1,656.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "豪運商行",
+      "address": "臺中市沙鹿區竹林里褔田北街442號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426P",
+      "qty": "2,318",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "豪運商行",
+      "address": "臺中市沙鹿區竹林里褔田北街442號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "994",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "豪運商行",
+      "address": "臺中市沙鹿區竹林里褔田北街442號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426P",
+      "qty": "1,656",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "豪運商行",
+      "address": "臺中市沙鹿區竹林里褔田北街442號1樓",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "1,656",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "豪運商行",
+      "address": "臺中市沙鹿區竹林里褔田北街442號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "4,968.00",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "賴育聖",
+      "address": "臺中市潭子區復興路一段140巷5號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "3,974.4",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "金食在食材有限公司",
+      "address": "臺中市烏日區溪南路一段680巷526弄36號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426P",
+      "qty": "4,686.5",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "金食在食材有限公司",
+      "address": "臺中市烏日區溪南路一段680巷526弄36號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "281.5",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "金食在食材有限公司",
+      "address": "臺中市烏日區溪南路一段680巷526弄36號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "8,313",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "金食在食材有限公司",
+      "address": "臺中市烏日區溪南路一段680巷526弄36號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "4,140",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "陳詩萍",
+      "address": "臺中市西屯區西安里西屯路二段297之8巷20號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "414.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "陳詩萍",
+      "address": "臺中市西屯區西安里西屯路二段297之8巷20號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426P",
+      "qty": "5,547.6",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "李美滿",
+      "address": "臺中市梧棲區南簡里１４鄰中央路２段５２８號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1140426K",
+      "qty": "828.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "李美滿",
+      "address": "臺中市梧棲區南簡里１４鄰中央路２段５２８號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "1,656",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "李美滿",
+      "address": "臺中市梧棲區南簡里１４鄰中央路２段５２８號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "265",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "永昌南北雜貨有限公司",
+      "address": "臺中市沙鹿區興仁里四平街34之6號1樓",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1140426K",
+      "qty": "1,656.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "永昌南北雜貨有限公司",
+      "address": "臺中市沙鹿區興仁里四平街34之6號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "1,656",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "森沂商行有限公司",
+      "address": "臺中市豐原區一心路108號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "2,981",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "仁偉商行",
+      "address": "臺中市大肚區遊園路二段196號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "1,656",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "米谷食品有限公司",
+      "address": "臺中市大里區東湖里忠孝235號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "1,656",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "國成食品有限公司",
+      "address": "臺中市北屯區平順里旅順路二段179號1樓",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "331",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "詠益商行",
+      "address": "臺中市西屯區西安里西屯路二段297之8巷20號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "8,363",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "詠益商行",
+      "address": "臺中市西屯區西安里西屯路二段297之8巷20號1樓",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "1,656",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "連興油行",
+      "address": "臺中市西屯區長安路一段45號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "8,280",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "連興油行",
+      "address": "臺中市西屯區長安路一段45號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "2,517",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "鼎鎂國際企業有限公司",
+      "address": "臺中市烏日區光華街38號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "4,968",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "鼎鎂國際企業有限公司",
+      "address": "臺中市烏日區光華街38號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "1,656",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "台邑餐飲有限公司",
+      "address": "臺中市清水區和睦路三段50巷20號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "1,987.20",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "劉權輝",
+      "address": "彰化縣二林鎮中山路126號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "3,312.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "帝一好行銷有限公司",
+      "address": "彰化縣員林市大埔里員大路二段46巷52弄196-1號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426P",
+      "qty": "1,656.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "帝一好行銷有限公司",
+      "address": "彰化縣員林市大埔里員大路二段46巷52弄196-1號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1140426K",
+      "qty": "828.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "梅景食品股份有限公司",
+      "address": "彰化縣埔心鄉東門村瑤鳳路三段318號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "4,968.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "梅景食品股份有限公司",
+      "address": "彰化縣埔心鄉東門村瑤鳳路三段318號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426P",
+      "qty": "3,312.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "梅景食品股份有限公司",
+      "address": "彰化縣埔心鄉東門村瑤鳳路三段318號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426P",
+      "qty": "3,312",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "梅景食品股份有限公司",
+      "address": "彰化縣埔心鄉東門村瑤鳳路三段318號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "3,312.00",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "正宏虎牌食材行銷有限公司",
+      "address": "彰化縣二林鎮中山路126號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "6,624.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "麥仕佳食品股份有限公司",
+      "address": "彰化縣芳苑鄉林功路89號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "33.1",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "源泰昌食品工廠",
+      "address": "彰化縣北斗鎮中山路一段260巷36弄26之1號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "82.8",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "苔凱行",
+      "address": "彰化縣埔鹽鄉太平村１０鄰番金路４１號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "496.8",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "林甫樵",
+      "address": "彰化縣二林鎮斗苑路五段282號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "166",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "志宏食品股份有限公司",
+      "address": "彰化縣秀水鄉福安村中山路５０７號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "1,656",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "志宏食品股份有限公司",
+      "address": "彰化縣秀水鄉福安村中山路５０７號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "166",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "和誠實業有限公司",
+      "address": "彰化縣溪州鄉中山路三段２７５號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "4,140.00",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "旺真久企業商行",
+      "address": "南投縣草屯鎮北投里北投路文教巷26弄8號2樓",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL150426L",
+      "qty": "712",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "旺真久企業商行",
+      "address": "南投縣草屯鎮北投里北投路文教巷26弄8號2樓",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "828",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "祥鼎食品有限公司",
+      "address": "南投縣草屯鎮茄荖里芬草路三段68號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL150426L",
+      "qty": "348",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "祥鼎食品有限公司",
+      "address": "南投縣草屯鎮茄荖里芬草路三段68號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "4,968",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "良美商行",
+      "address": "南投縣名間鄉彰南路332之5號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "6,624.00",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "南門食品原料有限公司",
+      "address": "雲林縣斗六市永昌東街68號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "794.9",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "南門食品原料有限公司",
+      "address": "雲林縣斗六市永昌東街68號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426P",
+      "qty": "4,173.1",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "南門食品原料有限公司",
+      "address": "雲林縣斗六市永昌東街68號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "794.9",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "南門食品原料有限公司",
+      "address": "雲林縣斗六市永昌東街68號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426P",
+      "qty": "4,173.1",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "南門食品原料有限公司",
+      "address": "雲林縣斗六市永昌東街68號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426P",
+      "qty": "4,173",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "味全食品工業股份有限公司",
+      "address": "雲林縣斗六市長林路１１號",
+      "product": "一級黃豆油",
+      "batch": "315-1150404",
+      "qty": "24,370.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "海寶粉行",
+      "address": "嘉義市東區朝陽街122號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1140426K",
+      "qty": "1,341.4",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "海寶粉行",
+      "address": "嘉義市東區朝陽街122號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "8,280",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "海寶粉行",
+      "address": "嘉義市東區朝陽街122號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "6,624",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "海寶粉行",
+      "address": "嘉義市東區朝陽街122號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426P",
+      "qty": "1,656",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "海寶粉行",
+      "address": "嘉義市東區朝陽街122號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "315",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "海寶粉行",
+      "address": "嘉義市東區朝陽街122號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "9,687.60",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "銘勝企業有限公司",
+      "address": "臺南市歸仁區中山九街35號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "5.5",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "鑫雍龍實業有限公司",
+      "address": "臺南市安南區安和路二段2巷2號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "877.7",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "益盛行",
+      "address": "臺南市永康區永大路2段1080號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "1,672.6",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "典佑商行有限公司",
+      "address": "臺南市永康區大灣東路330巷35號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1140426K",
+      "qty": "115.9",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "典佑商行有限公司",
+      "address": "臺南市永康區大灣東路330巷35號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL150426L",
+      "qty": "1,788",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "黃耀德",
+      "address": "臺南市白河區永安里康樂路64號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "497",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "黃耀德",
+      "address": "臺南市白河區永安里康樂路64號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "83",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "鴻達鑫企業",
+      "address": "臺南市安定區中榮里許中營58號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "1,987",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "鴻達鑫企業",
+      "address": "臺南市安定區中榮里許中營58號1樓",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "17",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "翔順免洗餐具有限公司",
+      "address": "臺南市永康區北興里永大路二段1080號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "83",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "翔順免洗餐具有限公司",
+      "address": "臺南市永康區北興里永大路二段1080號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "66.24",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "翔順免洗餐具有限公司",
+      "address": "臺南市永康區北興里永大路二段1080號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "248.4",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "美食家食材通路（股）公司-台南",
+      "address": "臺南市安南區工業一路58號3樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "1,987.20",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "三歐食品有限公司",
+      "address": "臺南市永康區永大路2段1080號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "1,656.00",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "聯瑞食品科技股份有限公司",
+      "address": "臺南市安南區顯宮里工業五路16號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "1,258.56",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "十代有限公司",
+      "address": "高雄市三民區覺民路768號(覺民倉庫)",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "265.0",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "味橋食材股份有限公司",
+      "address": "高雄市仁武區烏林里南昌巷201之69號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "861.1",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "味橋食材股份有限公司",
+      "address": "高雄市仁武區烏林里南昌巷201之69號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL150426L",
+      "qty": "331",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "聯豐麵粉有限公司",
+      "address": "高雄市鳳山區南華路１５１之１號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "1,987.2",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "鈞友企業社",
+      "address": "高雄市左營區尾北里菜公路131號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "662.4",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "泰裕食品有限公司",
+      "address": "高雄市鳳山區新興里中央商場2巷7之1號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "2,980.8",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "美食家食材通路（股）公司-高雄",
+      "address": "高雄市仁武區高楠公路81號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "1,987.2",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "美食家食材通路（股）公司-高雄",
+      "address": "高雄市仁武區高楠公路81號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL150426L",
+      "qty": "828",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "威淳食品有限公司",
+      "address": "高雄市楠梓區土庫五路112巷30號1樓",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1140426K",
+      "qty": "480.2",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "威淳食品有限公司",
+      "address": "高雄市楠梓區土庫五路112巷30號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "1,159",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "威淳食品有限公司",
+      "address": "高雄市楠梓區土庫五路112巷30號1樓",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "17",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "福來旺實業有限公司",
+      "address": "高雄市鳳山區輜汽路11號1樓",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1140426K",
+      "qty": "2,980.8",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "現兌-大社營業所",
+      "address": "高雄市大社區中山路521之2號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL150426L",
+      "qty": "3",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "黃志堅",
+      "address": "高雄市小港區康莊路159-1號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "745",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "黃志堅",
+      "address": "高雄市小港區康莊路159-1號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "911",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "冠頂食材股份有限公司",
+      "address": "高雄市仁武區烏林里南昌巷201之69號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "5,117",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "冠頂食材股份有限公司",
+      "address": "高雄市仁武區烏林里南昌巷201之69號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "1,706",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "明德食品工業股份有限公司",
+      "address": "高雄市岡山區河堤路二段128號1樓",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "497",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "森森家企業行",
+      "address": "高雄市苓雅區中正二路175號5樓之3",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "331",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "隆億商號",
+      "address": "高雄市苓雅區民權一路19號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL150426L",
+      "qty": "265",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "東泉行",
+      "address": "高雄市苓雅區永興街35號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL150426L",
+      "qty": "1,060",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "巧竺商行",
+      "address": "高雄市路竹區大仁路26號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "497",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "邱玉蓉",
+      "address": "高雄市鼓山區興隆路108號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "1,921",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "建泰號",
+      "address": "屏東縣潮州鎮同榮里西市路13之1號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "315",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "誠毅商行",
+      "address": "宜蘭縣宜蘭市陽明一路87號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "1,673",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "誠毅商行",
+      "address": "宜蘭縣宜蘭市陽明一路87號",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1160426K",
+      "qty": "3,378",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "謝東恩",
+      "address": "宜蘭縣羅東鎮清潭路98號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "1,656",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "旭華行",
+      "address": "宜蘭市延平路39號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "1,987",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "鑫良商行",
+      "address": "花蓮縣吉安鄉文化七街５８─１號１樓",
+      "product": "沙拉油－塑桶 ３Ｌ(P*6)",
+      "batch": "C1140426K",
+      "qty": "496.8",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "本居立有限公司",
+      "address": "花蓮縣花蓮市中原路294號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2140426O",
+      "qty": "5,166.7",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "相正企業有限公司",
+      "address": "花蓮縣吉安鄉和平路一段138號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL150426L",
+      "qty": "1,788",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "全勝行",
+      "address": "花蓮縣新城鄉順安村草林９８－１號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2150426O",
+      "qty": "2,517",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "全勝行",
+      "address": "花蓮縣新城鄉順安村草林９８－１號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426P",
+      "qty": "2,501",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "信輝商行",
+      "address": "臺東縣臺東市建國里臨海路一段167號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL150426L",
+      "qty": "3,177",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "信輝商行",
+      "address": "臺東縣臺東市建國里臨海路一段167號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2160426O",
+      "qty": "4,968",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "信輝商行",
+      "address": "臺東縣臺東市建國里臨海路一段167號",
+      "product": "健味香油　３Ｌ(P*6)",
+      "batch": "BL240426L",
+      "qty": "367.1",
+      "unit": "KG(總淨量)"
+    },
+    {
+      "company": "誠一食品有限公司",
+      "address": "澎湖縣馬公市光復路320號",
+      "product": "沙拉油　１８Ｌ",
+      "batch": "C2210426O",
+      "qty": "33.12",
+      "unit": "KG(總淨量)"
+    }
+  ],
+  "taishan_list": [
+    {
+      "company": "今春企業股份有限公司",
+      "address": "臺中市霧峰區四德路376巷9號",
+      "product": "泰山大豆沙拉油0.6L*12入(新版)",
+      "batch": "2027041301",
+      "qty": "20",
+      "unit": "箱"
+    },
+    {
+      "company": "今春企業股份有限公司",
+      "address": "臺中市霧峰區四德路376巷9號",
+      "product": "泰山花生風味調和油2L*6入",
+      "batch": "2027100901",
+      "qty": "20",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山不飽和大豆沙拉油2.6L*6入(新版)",
+      "batch": "2027040901",
+      "qty": "72",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山精選蔬菜油-3L*6",
+      "batch": "2027072506",
+      "qty": "40",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山精選蔬菜油-3L*6",
+      "batch": "2027072506",
+      "qty": "120",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山好理調合油-2L*6",
+      "batch": "2027072506",
+      "qty": "59",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山好理調合油-2L*6",
+      "batch": "2027072506",
+      "qty": "65",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山好理調合油-2L*6",
+      "batch": "2027072506",
+      "qty": "65",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山花生風味調和油2L*6入",
+      "batch": "2027100901",
+      "qty": "10",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山花生風味調和油2L*6入",
+      "batch": "2027100901",
+      "qty": "12",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山花生風味調和油2L*6入",
+      "batch": "2027100901",
+      "qty": "10",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山花生風味調和油2L*6入",
+      "batch": "2027100901",
+      "qty": "4",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山花生風味調和油2L*6入",
+      "batch": "2027100901",
+      "qty": "5",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山花生風味調和油2L*6入",
+      "batch": "2027100901",
+      "qty": "17",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山花生風味調和油2L*6入",
+      "batch": "2027100901",
+      "qty": "5",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山花生風味調和油2L*6入",
+      "batch": "2027100901",
+      "qty": "5",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山花生風味調和油2L*6入",
+      "batch": "2027100901",
+      "qty": "12",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山花生風味調和油2L*6入",
+      "batch": "2027100901",
+      "qty": "6",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山花生風味調和油2L*6入",
+      "batch": "2027100901",
+      "qty": "3",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山花生風味調和油2L*6入",
+      "batch": "2027100901",
+      "qty": "11",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山花生風味調和油2L*6入",
+      "batch": "2027100901",
+      "qty": "11",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山花生風味調和油2L*6入",
+      "batch": "2027100901",
+      "qty": "8",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山花生風味調和油2L*6入",
+      "batch": "2027100901",
+      "qty": "12",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山花生風味調和油2L*6入",
+      "batch": "2027100901",
+      "qty": "12",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山花生風味調和油2L*6入",
+      "batch": "2027100901",
+      "qty": "10",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山花生風味調和油2L*6入",
+      "batch": "2027100901",
+      "qty": "15",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山花生風味調和油2L*6入",
+      "batch": "2027100901",
+      "qty": "14",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山花生風味調和油2L*6入",
+      "batch": "2027100901",
+      "qty": "15",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山花生風味調和油2L*6入",
+      "batch": "2027100901",
+      "qty": "11",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山好理調合油0.6L*24",
+      "batch": "2027072504",
+      "qty": "60",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山好理調合油0.6L*24",
+      "batch": "2027072504",
+      "qty": "60",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山好理調合油0.6L*24",
+      "batch": "2027072504",
+      "qty": "60",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山好理調合油0.6L*24",
+      "batch": "2027072504",
+      "qty": "77",
+      "unit": "箱"
+    },
+    {
+      "company": "弘達流通(股)公司-梧棲倉",
+      "address": "臺中市梧棲區港埠路一段237-1號",
+      "product": "泰山好理調合油0.6L*24",
+      "batch": "2027072504",
+      "qty": "60",
+      "unit": "箱"
+    },
+    {
+      "company": "好樂迪大里店",
+      "address": "臺中市大里區中興路二段446-5號",
+      "product": "金酥耐炸油-18L",
+      "batch": "2027040801",
+      "qty": "5",
+      "unit": "桶"
+    },
+    {
+      "company": "吳建泩倉庫",
+      "address": "臺中市神岡區大豐路四段376號",
+      "product": "泰山大豆沙拉油0.6L*12入(新版)",
+      "batch": "2027041301",
+      "qty": "50",
+      "unit": "箱"
+    },
+    {
+      "company": "吳建泩倉庫",
+      "address": "臺中市神岡區大豐路四段376號",
+      "product": "泰山大豆沙拉油0.6L*12入(新版)",
+      "batch": "2027041301",
+      "qty": "1",
+      "unit": "箱"
+    },
+    {
+      "company": "志達實業股份有限公司",
+      "address": "臺中市西區美村路一段272號",
+      "product": "金酥耐炸油-18L",
+      "batch": "2027040801",
+      "qty": "15",
+      "unit": "桶"
+    },
+    {
+      "company": "金食在食材有限公司",
+      "address": "臺中市烏日區溪南路一段680巷526弄36號",
+      "product": "沙拉油-18L",
+      "batch": "2027040901",
+      "qty": "100",
+      "unit": "桶"
+    },
+    {
+      "company": "金食在食材有限公司",
+      "address": "臺中市烏日區溪南路一段680巷526弄36號",
+      "product": "環保鐵桶沙拉油-18Kg",
+      "batch": "2027040901",
+      "qty": "45",
+      "unit": "桶"
+    },
+    {
+      "company": "美升鮮台中倉",
+      "address": "臺中市太平區東平路663號",
+      "product": "沙拉油-18L",
+      "batch": "2027040901",
+      "qty": "60",
+      "unit": "桶"
+    },
+    {
+      "company": "茗洋企業有限公司",
+      "address": "臺中市神岡區光復路516巷11號",
+      "product": "泰山不飽和大豆沙拉油2.6L*6入(新版)",
+      "batch": "2027040901",
+      "qty": "5",
+      "unit": "箱"
+    },
+    {
+      "company": "連興油行",
+      "address": "臺中市長安路一段45號",
+      "product": "金酥耐炸油-18L",
+      "batch": "2027040801",
+      "qty": "150",
+      "unit": "桶"
+    },
+    {
+      "company": "連興油行",
+      "address": "臺中市長安路一段46號",
+      "product": "沙拉油-18L",
+      "batch": "2027040901",
+      "qty": "100",
+      "unit": "桶"
+    },
+    {
+      "company": "連興油行",
+      "address": "臺中市長安路一段47號",
+      "product": "沙拉油-18L",
+      "batch": "2027040901",
+      "qty": "100",
+      "unit": "桶"
+    },
+    {
+      "company": "連興油行",
+      "address": "臺中市長安路一段48號",
+      "product": "環保鐵桶沙拉油-18Kg",
+      "batch": "2027040901",
+      "qty": "200",
+      "unit": "桶"
+    },
+    {
+      "company": "勝薪商行",
+      "address": "臺中市大雅區上山一路58號",
+      "product": "泰山好理調合油-2L*6",
+      "batch": "2027072506",
+      "qty": "2",
+      "unit": "箱"
+    },
+    {
+      "company": "勝薪商行",
+      "address": "臺中市大雅區上山一路58號",
+      "product": "泰山花生風味調和油2L*6入",
+      "batch": "2027100901",
+      "qty": "2",
+      "unit": "箱"
+    },
+    {
+      "company": "億錦德商行",
+      "address": "臺中市太平鄉溪州路80號",
+      "product": "環保鐵桶沙拉油-18Kg",
+      "batch": "2027040901",
+      "qty": "100",
+      "unit": "桶"
+    },
+    {
+      "company": "聯發商行",
+      "address": "臺中市后里區南村路333巷38-5號",
+      "product": "泰山大豆沙拉油0.6L*12入(新版)",
+      "batch": "2027041301",
+      "qty": "20",
+      "unit": "箱"
+    },
+    {
+      "company": "鴻昌商行倉庫",
+      "address": "臺中市烏日區五光路931巷28-9號",
+      "product": "泰山大豆沙拉油0.6L*12入(新版)",
+      "batch": "2027041301",
+      "qty": "5",
+      "unit": "箱"
+    }
+  ],
+  "news": [{
+      "date": "2026-07-04",
+      "title": "截至7/3中午，累計回收約17.4公噸，占1300公噸總出貨量比例仍偏低(1.3%)",
+      "link": ""
+    }
+    ,
+    {
+      "date": "2026-07-03",
+      "title": "卜蜂使用問題油品製成56項熟食及加工食品（雞胸肉、義大利麵、炒飯等），約4950公斤，全面下架回收至7/17",
+      "link": ""
+    },
+    {
+      "date": "2026-07-03",
+      "title": "味王8項泡麵油包（原汁牛肉湯麵、紅燒牛肉湯麵等）受影響，回收退貨至8/31",
+      "link": ""
+    },
+    {
+      "date": "2026-07-03",
+      "title": "聯華食品：僅2項自有商品（荷卡炙燒明太子鮭魚烤飯糰、荷卡極上經典飯糰冷凍商品）受影響，可樂果、卡迪那等零食系列未使用問題油品",
+      "link": ""
+    },
+    {
+      "date": "2026-07-03",
+      "title": "新增公布泰山企業台中市下游業者名單，共13家、51筆品項紀錄",
+      "link": ""
+    },
+    {
+      "date": "2026-07-03",
+      "title": "福壽下游名單更新至149家（較07/02版本的85家大幅擴增）",
+      "link": ""
+    },
+    {
+      "date": "2026-07-03",
+      "title": "三大廠自有品牌回收品項更新為30項批號（較先前版本新增部分批號）",
+      "link": ""
+    },
+    {
+      "date": "2026-07-02",
+      "title": "台中市食安處公布首波福壽、福懋下游業者名單，含王品集團、老協珍、桂冠、路易莎、爭鮮、晶華酒店等",
+      "link": ""
+    },
+    {
+      "date": "2026-07-02",
+      "title": "食藥署：下游加工成品（雞塊、沙拉醬等）風險評估後暫不列入強制下架範圍，僅下架第一層油品及分裝油品",
+      "link": ""
+    },
+    {
+      "date": "2026-07-02",
+      "title": "福壽初估損失8000萬至9000萬元，將向中聯求償；福懋損失統計中",
+      "link": ""
+    },
+    {
+      "date": "2026-07-01",
+      "title": "食藥署公布：中聯油脂供應福懋約588公噸、福壽約421公噸、泰山約291公噸，共1300公噸問題大豆沙拉油",
+      "link": ""
+    },
+    {
+      "date": "2026-06-30",
+      "title": "中聯油脂主動通報大豆沙拉油苯駢芘（BaP）超標，啟動回收機制",
+      "link": ""
+    }
+  ]
+};
 
-        // 渲染新聞
-        function renderNews() {
-            var container = document.getElementById('newsContainer');
-            var sorted = DATA.news.slice().sort(function(a, b) {
-                return b.date.localeCompare(a.date);
-            });
-            var html = '<ul class="list-group list-group-flush">';
-            sorted.forEach(function(item) {
-                html += '<li class="list-group-item d-flex flex-wrap align-items-start gap-2">' +
-                    '<span class="badge bg-danger bg-opacity-75 text-white" style="min-width:90px;">' +
-                    item.date + '</span>' +
-                    '<span>' + escapeHtml(item.title) + '</span>' +
-                    '</li>';
-            });
-            html += '</ul>';
-            container.innerHTML = html;
-        }
 
-        function escapeHtml(text) {
-            if (!text) return '';
-            return String(text).replace(/[&<>"]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                if (m === '"') return '&quot;';
-                return m;
-            });
-        }
+let ALL_ROWS = [];
+let table = null;
 
-        // 渲染表格
-        function renderTable() {
-            var tbody = document.getElementById('resultBody');
-            var count = document.getElementById('resultCount');
-            var pageInfo = document.getElementById('pageInfo');
-            var total = filteredData.length;
-            var totalPages = Math.max(1, Math.ceil(total / pageSize));
-            if (currentPage > totalPages) currentPage = totalPages;
-            if (currentPage < 1) currentPage = 1;
-            var start = (currentPage - 1) * pageSize;
-            var end = Math.min(start + pageSize, total);
-            var pageItems = filteredData.slice(start, end);
+function escapeHtml(str) {
+  return (str || "").toString()
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
 
-            count.textContent = total + ' 筆';
-            pageInfo.textContent = '第 ' + currentPage + ' / ' + totalPages + ' 頁';
+function badgeClass(source) {
+  if (source === "recalled_products") return "recalled";
+  if (source === "fumao") return "fumao";
+  if (source === "fushou") return "fushou";
+  if (source === "taishan") return "taishan";
+  return "";
+}
 
-            if (total === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="no-result">查無符合資料</td></tr>';
-                return;
-            }
+function sourceLabel(source) {
+  if (source === "recalled_products") return "回收產品";
+  if (source === "fumao") return "福懋下游";
+  if (source === "fushou") return "福壽下游";
+  if (source === "taishan") return "泰山下游";
+  return source;
+}
 
-            var html = '';
-            pageItems.forEach(function(item) {
-                var sourceBadge = '';
-                if (item.source === '福懋散裝') sourceBadge = 'bg-primary';
-                else if (item.source === '福懋桶裝') sourceBadge = 'bg-success';
-                else if (item.source === '福壽') sourceBadge = 'bg-warning text-dark';
-                else sourceBadge = 'bg-secondary';
+// 將五種來源資料統一整理成同一種列格式
+function flattenData(data) {
+  const rows = [];
 
-                html += '<tr>' +
-                    '<td><span class="fw-semibold">' + escapeHtml(item.company) + '</span></td>' +
-                    '<td>' + escapeHtml(item.address) + '</td>' +
-                    '<td>' + escapeHtml(item.product) + '</td>' +
-                    '<td><code>' + escapeHtml(item.batch) + '</code></td>' +
-                    '<td>' + escapeHtml(item.spec) + '</td>' +
-                    '<td><span class="badge ' + sourceBadge + '">' + escapeHtml(item.source) + '</span></td>' +
-                    '</tr>';
-            });
-            tbody.innerHTML = html;
-            updatePagination(totalPages);
-        }
+  (data.recalled_products || []).forEach(item => {
+    rows.push({
+      source: "recalled_products",
+      company: item.brand,
+      address: "（自有品牌通路／全台鋪貨，非單一下游業者）",
+      product: item.product,
+      batch: item.batch,
+      qty: ""
+    });
+  });
 
-        function updatePagination(totalPages) {
-            var ul = document.getElementById('pagination');
-            ul.innerHTML = '<li class="page-item ' + (currentPage <= 1 ? 'disabled' : '') +
-                '"><a class="page-link" href="#" data-page="prev">‹</a></li>' +
-                '<li class="page-item disabled"><span class="page-link">' + currentPage + ' / ' + totalPages +
-                '</span></li>' +
-                '<li class="page-item ' + (currentPage >= totalPages ? 'disabled' : '') +
-                '"><a class="page-link" href="#" data-page="next">›</a></li>';
-        }
+  (data.fumao_bulk || []).forEach(item => {
+    rows.push({
+      source: "fumao",
+      company: item.company,
+      address: item.address,
+      product: item.product + (item.spec ? "（" + item.spec + "）" : ""),
+      batch: item.batch,
+      qty: item.qty
+    });
+  });
 
-        // 來源代碼 -> 資料中實際 source 文字 對照表
-        var SOURCE_NAME_MAP = {
-            fumao_bulk: '福懋散裝',
-            fumao_barrel: '福懋桶裝',
-            fushou: '福壽',
-            own_brand: '自有品牌'
-        };
+  (data.fumao_barrel || []).forEach(item => {
+    rows.push({
+      source: "fumao",
+      company: item.company,
+      address: item.address,
+      product: item.product + (item.spec ? "（" + item.spec + "）" : ""),
+      batch: item.batch,
+      qty: item.qty
+    });
+  });
 
-        // 過濾
-        function filterData(type, keyword, source) {
-            keyword = keyword.trim().toLowerCase();
-            var sourceFilter = source || currentSource;
-            var temp = currentData.slice();
+  (data.fushou_list || []).forEach(item => {
+    rows.push({
+      source: "fushou",
+      company: item.company,
+      address: item.address,
+      product: item.product,
+      batch: item.batch,
+      qty: item.qty
+    });
+  });
 
-            // 來源過濾
-            if (sourceFilter !== 'all') {
-                var sourceName = SOURCE_NAME_MAP[sourceFilter] || sourceFilter;
-                temp = temp.filter(function(d) { return d.source === sourceName; });
-            }
+  (data.taishan_list || []).forEach(item => {
+    rows.push({
+      source: "taishan",
+      company: item.company,
+      address: item.address,
+      product: item.product,
+      batch: item.batch,
+      qty: item.qty + (item.unit ? " " + item.unit : "")
+    });
+  });
 
-            if (keyword === '') {
-                filteredData = temp;
-            } else {
-                temp = temp.filter(function(d) {
-                    if (type === 'company') return d.company.toLowerCase().includes(keyword);
-                    if (type === 'product') return d.product.toLowerCase().includes(keyword);
-                    if (type === 'batch') return d.batch.toLowerCase().includes(keyword);
-                    if (type === 'address') return d.address.toLowerCase().includes(keyword);
-                    // keyword 全域
-                    return d.company.toLowerCase().includes(keyword) ||
-                        d.address.toLowerCase().includes(keyword) ||
-                        d.product.toLowerCase().includes(keyword) ||
-                        d.batch.toLowerCase().includes(keyword);
-                });
-                filteredData = temp;
-            }
+  return rows;
+}
 
-            // 排序
-            sortData(currentSort.key, currentSort.asc);
-            currentPage = 1;
-            renderTable();
-        }
+function buildTableRows(rows) {
+  const $body = $("#resultBody");
+  $body.empty();
+  rows.forEach(r => {
+    $body.append(`
+      <tr>
+        <td><span class="badge-src ${badgeClass(r.source)}">${sourceLabel(r.source)}</span></td>
+        <td>${escapeHtml(r.company)}</td>
+        <td class="small">${escapeHtml(r.address)}</td>
+        <td>${escapeHtml(r.product)}</td>
+        <td class="small">${escapeHtml(r.batch)}</td>
+        <td>${r.qty || ""}</td>
+        <td>${r.source}</td>
+      </tr>
+    `);
+  });
+}
 
-        // 排序
-        function sortData(key, asc) {
-            filteredData.sort(function(a, b) {
-                var va = (a[key] || '').toLowerCase();
-                var vb = (b[key] || '').toLowerCase();
-                if (va < vb) return asc ? -1 : 1;
-                if (va > vb) return asc ? 1 : -1;
-                return 0;
-            });
-        }
+function initDataTable() {
+  table = $("#resultTable").DataTable({
+    pageLength: 25,
+    lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "全部"]],
+    order: [],
+    columnDefs: [
+      { targets: 6, visible: false, searchable: true } // 隱藏的「來源篩選鍵」欄位，供下拉選單篩選用
+    ],
+    language: {
+      search: "", // 用自訂搜尋框取代內建搜尋框
+      lengthMenu: "每頁顯示 _MENU_ 筆",
+      info: "顯示第 _START_ 到 _END_ 筆，共 _TOTAL_ 筆",
+      infoEmpty: "沒有符合的資料",
+      infoFiltered: "（從 _MAX_ 筆中篩選）",
+      zeroRecords: "查無符合資料, 請洽店家或品牌客服確認採購來源。",
+      paginate: {
+        first: "第一頁",
+        last: "最後頁",
+        next: "下一頁",
+        previous: "上一頁"
+      }
+    },
+    dom: '<"d-flex justify-content-between align-items-center flex-wrap gap-2"lf>rt<"d-flex justify-content-between align-items-center flex-wrap gap-2"ip>'
+  });
 
-        // ================================================================
-        //  3. 事件綁定 (使用 jQuery)
-        // ================================================================
-        $(document).ready(function() {
+  // 隱藏 DataTables 內建搜尋框（我們用自訂的 #searchInput 取代），只保留 length menu
+  $(".dataTables_filter").hide();
+}
 
-            // 渲染新聞
-            renderNews();
+function bindSearchControls() {
+  // 自訂搜尋框 -> 套用到 DataTable 全域搜尋
+  $("#searchInput").on("input", function () {
+    table.search($(this).val()).draw();
+  });
 
-            // 預設顯示全部（空關鍵字）
-            filteredData = currentData.slice();
-            sortData('company', true);
-            renderTable();
+  // 來源下拉 -> 篩選隱藏欄位（第7欄, index 6）
+  $("#filterSource").on("change", function () {
+    const val = $(this).val();
+    const colSearch = val === "all" ? "" : "^" + val + "$";
+    table.column(6).search(colSearch, true, false).draw();
+  });
+}
 
-            // Tab 切換
-            $('[data-tab]').on('click', function(e) {
-                e.preventDefault();
-                var tab = $(this).data('tab');
-                $('.tab-pane').hide();
-                $('#tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).show();
-                $('[data-tab]').removeClass('active');
-                $(this).addClass('active');
-            });
+function renderFacts(data) {
+  const facts = [
+    `檢出苯駢芘 <strong>${data.meta.bap_value}</strong>`,
+    `涉及原料批號：<strong>${data.meta.batch_root}</strong>`,
+    `出貨去向：福懋約588公噸、福壽約421公噸、泰山約291公噸，合計約1300公噸`,
+    `目前以 B2B 通路為主，也有流入大型量販、超市、超商及電商平台，業務用大桶裝油 小吃店/團膳/餐廳皆有可能`,
+    `苯駢芘屬慢性累積致癌物（IARC第一級），非急性劇毒，短期暴露後多可隨代謝排出，但應避免持續攝入`
+  ];
+  const $ul = $("#factList");
+  $ul.empty();
+  facts.forEach(f => $ul.append(`<li>${f}</li>`));
+}
 
-            // 搜尋按鈕
-            $('#searchBtn').on('click', function() {
-                var type = $('#searchType').val();
-                var keyword = $('#searchKeyword').val();
-                filterData(type, keyword, currentSource);
-            });
+function renderNews(newsArr) {
+  const $list = $("#newsList");
+  $list.empty();
+  newsArr
+    .slice()
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .forEach(n => {
+      $list.append(`
+        <div class="news-item">
+          <span class="news-date">${n.date}</span>
+          <div>${escapeHtml(n.title)}</div>
+        </div>
+      `);
+    });
+}
 
-            // Enter 鍵搜尋
-            $('#searchKeyword').on('keyup', function(e) {
-                if (e.key === 'Enter') {
-                    $('#searchBtn').click();
-                }
-            });
+function initWithData(data) {
+  ALL_ROWS = flattenData(data);
+  buildTableRows(ALL_ROWS);
+  initDataTable();
+  bindSearchControls();
+  renderFacts(data);
+  renderNews(data.news || []);
+  $("#totalCount").text(ALL_ROWS.length);
+  $("#lastUpdated").text("資料整理時間：" + (data.meta.last_updated || ""));
+}
 
-            // 來源 badge 點擊
-            $('.source-badge').on('click', function() {
-                $('.source-badge').removeClass('active');
-                $(this).addClass('active');
-                currentSource = $(this).data('source');
-                var type = $('#searchType').val();
-                var keyword = $('#searchKeyword').val();
-                filterData(type, keyword, currentSource);
-            });
+$(function () {
+  if (typeof OIL_DATA !== "undefined") {
+    initWithData(OIL_DATA);
+  }
+});
 
-            // 重設按鈕
-            $('#resetBtn').on('click', function() {
-                $('#searchKeyword').val('');
-                $('#searchType').val('keyword');
-                $('.source-badge').removeClass('active');
-                $('.source-badge[data-source="all"]').addClass('active');
-                currentSource = 'all';
-                filteredData = currentData.slice();
-                sortData('company', true);
-                currentPage = 1;
-                renderTable();
-            });
 
-            // 分頁
-            $(document).on('click', '#pagination a', function(e) {
-                e.preventDefault();
-                var action = $(this).data('page');
-                var total = filteredData.length;
-                var totalPages = Math.max(1, Math.ceil(total / pageSize));
-                if (action === 'prev' && currentPage > 1) {
-                    currentPage--;
-                    renderTable();
-                }
-                if (action === 'next' && currentPage < totalPages) {
-                    currentPage++;
-                    renderTable();
-                }
-            });
 
-            // 排序表頭
-            $('#resultTable th').on('click', function() {
-                var key = $(this).data('sort');
-                if (!key) return;
-                if (currentSort.key === key) {
-                    currentSort.asc = !currentSort.asc;
-                } else {
-                    currentSort.key = key;
-                    currentSort.asc = true;
-                }
-                sortData(currentSort.key, currentSort.asc);
-                currentPage = 1;
-                renderTable();
-            });
+</script>
 
-            // 更新時間
-            $('#updateTime').text('更新: ' + DATA.meta.last_updated);
 
-        }); // end document.ready
-    </script>
+
 
 </body>
 </html>
